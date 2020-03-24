@@ -15,8 +15,6 @@ import com.temp.permission.model.response.MenuResponse;
 import com.temp.permission.service.MenuService;
 import com.temp.permission.util.ConsoleUtil;
 
-import static org.mockito.Matchers.intThat;
-
 import java.io.IOException;
 import java.util.*;
 @Service
