@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wiserun.develop.process.mapper.ProcessMapper" >
+
+    <resultMap id="BaseResultMap" type="com.wiserun.develop.process.model.Process" >
+    		<!-- 流程模块 -->
+        <result column="Model" property="Model" jdbcType="VARCHAR" />
+       		<!-- 流程模块主键 -->
+        <result column="ModelCode" property="ModelCode" jdbcType="VARCHAR" />
+        	<!-- 操作 -->
+        <result column="Action" property="Action" jdbcType="VARCHAR" />
+     		<!-- 操作结果 -->
+        <result column="Result" property="Result" jdbcType="CHAR" />
+       		<!-- 描述 -->
+        <result column="Description" property="Description" jdbcType="VARCHAR" />
+        	<!-- 流程批次 -->
+        <result column="Batch" property="Batch" jdbcType="CHAR" />
+       	    <!-- 流程配置编号 -->
+        <result column="ConfigNo" property="ConfigNo" jdbcType="VARCHAR" />
+     	    <!--版本号 -->
+        <result column="Version" property="Version" jdbcType="VARCHAR" />
+        	<!-- 步骤编号 -->
+        <result column="Step" property="Step" jdbcType="VARCHAR" />
+     	    <!--配置角色 -->
+        <result column="Role" property="Role" jdbcType="VARCHAR" />
+            <!--登录人 -->
+        <result column="LoginUser" property="LoginUser" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<!-- 根据条件查找数据 -->
+     <select id="queryAndAdd" resultMap="BaseResultMap" parameterType="com.wiserun.develop.process.model.Process">
+    	SELECT * FROM System_ProcessConfig  
+    	<where>
+    	SPC_Code NOT IN(SELECT SPR_ConfigNo FROM System_ProcessRecord where SPR_Batch=#{Batch,jdbcType=VARCHAR} AND SPR_Model=#{Model,jdbcType=VARCHAR}) 
+    	AND SPC_Model=#{Model,jdbcType=VARCHAR} AND SPC_Version=#{Version,jdbcType=VARCHAR}
+		</where>
+		ORDER BY SPC_Step ASC LIMIT 1
+    </select> 
+    <!-- 查找记录并排序 -->
+   <select id="queryList" resultMap="BaseResultMap" parameterType="com.wiserun.develop.process.model.Process">
+        SELECT * FROM System_ProcessRecord
+        <where>
+        	<if test="Model != null" >
+                AND SPR_Model =#{Model,jdbcType=VARCHAR}
+            </if>
+            <if test="ModelCode != null" >
+                AND SPR_ModelCode=#{ModelCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+			 ORDER BY Batch ASC,(select SPC_Step from System_ProcessConfig where SPC_Code in(select SPR_ConfigNo from System_ProcessRecord where SPR_Model=#{Model,jdbcType=VARCHAR} and SPR_ModelCode=#{ModelCode,jdbcType=VARCHAR})) ASC
+    </select> 
+    <!-- 根据SPC_Code查找出一条详细信息 -->
+    <select id="queryOne1" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT *  FROM System_ProcessConfig
+        WHERE SPC_Code = #{ConfigNo,jdbcType=VARCHAR}
+    </select>
+    <!-- 更新方法 -->
+   <!--  <update id="update" parameterType="com.wiserun.develop.process.model.Process" >
+        update System_ProcessConfig
+        <set>
+            <if test="SPC_CreateTime != null" >
+                SPC_CreateTime = #{SPC_CreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_CreateUser != null" >
+                SPC_CreateUser = #{SPC_CreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_State != null" >
+                SPC_State = #{SPC_State,jdbcType=CHAR},
+            </if>
+            <if test="SPC_Model != null" >
+                SPC_Model = #{SPC_Model,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_Version != null" >
+                SPC_Version = #{SPC_Version,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_Step != null" >
+                SPC_Step = #{SPC_Step,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_Role != null" >
+                SPC_Role = #{SPC_Role,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where SPC_Code = #{SPC_Code,jdbcType=VARCHAR}
+    </update> -->
+    
+    <!-- <insert id="add" parameterType="com.wiserun.develop.process.model.Process" >
+        INSERT INTO System_ProcessConfig
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="SPC_Code != null" >
+                `SPC_Code`,
+            </if>
+            <if test="SPC_CreateTime != null" >
+                `SPC_CreateTime`,
+            </if>
+            <if test="SPC_CreateUser != null" >
+                `SPC_CreateUser`,
+            </if>
+            <if test="SPC_State != null" >
+                `SPC_State`,
+            </if>
+            <if test="SPC_Model != null" >
+                `SPC_Model`,
+            </if>
+            <if test="SPC_Version != null" >
+                `SPC_Version`,
+            </if>
+            <if test="SPC_Step != null" >
+                `SPC_Step`,
+            </if>
+            <if test="SPC_Role != null" >
+                `SPC_Role`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="SPC_Code != null" >
+                #{SPC_Code,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_CreateTime != null" >
+                #{SPC_CreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_CreateUser != null" >
+                #{SPC_CreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_State != null" >
+                #{SPC_State,jdbcType=CHAR},
+            </if>
+            <if test="SPC_Model != null" >
+                #{SPC_Model,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_Version != null" >
+                #{SPC_Version,jdbcType=CHAR},
+            </if>
+            <if test="SPC_Step != null" >
+                #{SPC_Step,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_Role != null" >
+                #{SPC_Role,jdbcType=CHAR},
+            </if>            
+        </trim>
+    </insert> -->
+</mapper>

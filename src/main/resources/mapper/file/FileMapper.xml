@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wiserun.develop.file.mapper.FileMapper" >
+
+    <resultMap id="BaseResultMap" type="com.wiserun.develop.file.model.S_File" >
+   		<!-- 附件编号 -->
+        <result column="SF_Code" property="SF_Code" jdbcType="VARCHAR" />
+        <!-- 创建时间 -->
+        <result column="SF_CreateTime" property="SF_CreateTime" jdbcType="VARCHAR" />
+        <!-- 创建人 -->
+        <result column="SF_CreateUser" property="SF_CreateUser" jdbcType="VARCHAR" />
+        <!--  状态 -->
+        <result column="SF_State" property="SF_State" jdbcType="CHAR" />
+        <!-- 业务表编号 -->
+        <result column="SF_BussinessCode" property="SF_BussinessCode" jdbcType="VARCHAR" />
+        <!-- 附件类型 -->
+        <result column="SF_FileType" property="SF_FileType" jdbcType="VARCHAR" />
+        <!--  附件名称 -->
+        <result column="SF_FileName" property="SF_FileName" jdbcType="VARCHAR" />
+  		<!-- 附件路径 -->
+        <result column="SF_Path" property="SF_Path" jdbcType="VARCHAR" />
+        <!-- 临时路径 -->
+        <result column="SF_TempPath" property="SF_TempPath" jdbcType="VARCHAR" />
+        <!-- 附件模板编号 -->
+        <result column="SFT_Code" property="SFT_Code" jdbcType="VARCHAR" />        
+    </resultMap>
+
+    <sql id="Base_Column_List" >        <!--  相当于sql语句的* -->
+        `SF_Code`, `SF_CreateTime`, `SF_CreateUser`, `SF_State`, `SF_BussinessCode`, `SF_FileType`,`SF_FileName`,`SF_Path`,`SF_TempPath`
+    </sql>
+
+	<!-- 根据条件查找所有数据并分页 -->
+     <select id="queryPageList" resultMap="BaseResultMap" parameterType="com.wiserun.develop.file.model.S_File">
+		    	SELECT
+		        <include refid="Base_Column_List" />
+		        FROM  System_File
+		    	 <where>     
+					<if test="SF_Code != null" >
+		                AND SF_Code like "%"#{RA_Code,jdbcType=VARCHAR}"%"
+		            </if>
+		            <if test="SF_CreateUser != null" >
+		            	AND SF_CreateUser IN(SELECT user_phone FROM admin_user WHERE user_name LIKE "%"#{SF_CreateUser,jdbcType=VARCHAR}"%")
+		            </if>		    	          
+		        	<if test="SF_State != null" >
+		                AND SF_State like "%"#{SF_State,jdbcType=CHAR}"%"
+		            </if>
+		        	<if test="SF_BussinessCode != null" >
+		                AND SF_BussinessCode =#{SF_BussinessCode,jdbcType=VARCHAR}
+		            </if>
+		        </where> 
+		       		 ORDER BY SF_State ASC LIMIT ${(page - 1) * size}, ${size}
+
+    </select> 
+    <select id="queryList" resultMap="BaseResultMap" parameterType="com.wiserun.develop.file.model.S_File">
+		    	SELECT
+		        <include refid="Base_Column_List" />
+		        FROM  System_File
+		    	 <where>     
+					<if test="SF_Code != null" >
+		                AND SF_Code like =#{RA_Code,jdbcType=VARCHAR}
+		            </if>
+		            <if test="SF_CreateUser != null" >
+		                AND SF_CreateUser IN(SELECT user_phone FROM admin_user WHERE user_name LIKE "%"#{SF_CreateUser,jdbcType=VARCHAR}"%")
+		            </if>		    	          
+		        	<if test="SF_State != null" >
+		                AND SF_State like "%"#{SF_State,jdbcType=CHAR}"%"
+		            </if>
+		        	<if test="SF_BussinessCode != null" >
+		                AND SF_BussinessCode =#{SF_BussinessCode,jdbcType=VARCHAR}
+		            </if>
+		        </where> 
+		       		 ORDER BY SF_State ASC 
+
+    </select> 
+   <!--  根据模板类型的编号查询附件列表 -->
+    <select id="queryListBySFT_Code" resultMap="BaseResultMap" parameterType="java.lang.String">
+		    	SELECT * FROM  system_file
+		    	 WHERE SF_BussinessCode IN (SELECT RA_Code FROM resource_apply WHERE RA_ApplyType= #{SFT_Code,jdbcType=VARCHAR})
+    </select> 
+
+    <!-- 查找出记录总条数 -->
+    <select id="queryCount" resultType="java.lang.Integer" parameterType="com.wiserun.develop.file.model.S_File">
+		    	 SELECT COUNT(*) FROM System_File
+		    	 <where>
+					<if test="SF_Code != null" >
+		                AND SF_Code like "%"#{RA_Code,jdbcType=VARCHAR}"%"
+		            </if>
+		            <if test="SF_CreateUser != null" >
+		                AND SF_CreateUser IN(SELECT user_phone FROM admin_user WHERE user_name LIKE "%"#{SF_CreateUser,jdbcType=VARCHAR}"%")
+		            </if>
+		            <if test="SF_State != null" >
+		                AND SF_State = #{SF_State,jdbcType=CHAR}
+		            </if>
+		            <if test="SF_BussinessCode != null" >
+		                AND SF_BussinessCode =#{SF_BussinessCode,jdbcType=VARCHAR}
+		            </if>
+		        </where>   
+    </select> 
+    <!-- 根据编号查找出一条详细信息 -->
+     <select id="queryOne1" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM System_File
+        WHERE SF_Code = #{SF_Code,jdbcType=VARCHAR}
+    </select>  
+        <!-- 根据业务表编号查找出一条详细信息 -->
+     <select id="queryOne2" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM System_File
+        WHERE SF_BussinessCode = #{SF_BussinessCode,jdbcType=VARCHAR}
+    </select>
+    <!-- 添加操作 -->
+    <insert id="add" parameterType="com.wiserun.develop.file.model.S_File" >
+        INSERT INTO System_File					
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="SF_Code != null" >
+                `SF_Code`,
+            </if>
+            <if test="SF_CreateTime != null" >
+                `SF_CreateTime`,
+            </if>
+            <if test="SF_CreateUser != null" >
+                `SF_CreateUser`,
+            </if>
+            <if test="SF_State != null" >
+                `SF_State`,
+            </if>
+            <if test="SF_BussinessCode != null" >
+                `SF_BussinessCode`,
+            </if>
+            <if test="SF_FileType != null" >
+                `SF_FileType`,
+            </if>
+            <if test="SF_FileName != null" >
+                `SF_FileName`,
+            </if>
+            <if test="SF_Path != null" >
+                `SF_Path`,
+            </if>
+            <if test="SF_TempPath != null" >
+                `SF_TempPath`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="SF_Code != null" >
+                #{SF_Code,jdbcType=VARCHAR},
+            </if>
+            <if test="SF_CreateTime != null" >
+                #{SF_CreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="SF_CreateUser != null" >
+                #{SF_CreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="SF_State != null" >
+                #{SF_State,jdbcType=CHAR},
+            </if>
+            <if test="SF_BussinessCode != null" >
+                #{SF_BussinessCode,jdbcType=VARCHAR},
+            </if>
+            <if test="SF_FileType != null" >
+                #{SF_FileType,jdbcType=VARCHAR},
+            </if>
+            <if test="SF_FileName != null" >
+                #{SF_FileName,jdbcType=VARCHAR},
+            </if>
+            <if test="SF_Path != null" >
+                #{SF_Path,jdbcType=VARCHAR},
+            </if>
+            <if test="SF_TempPath != null" >
+                #{SF_TempPath,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    
+    
+    <!-- 更新方法 -->
+     <update id="update" parameterType="com.wiserun.develop.file.model.S_File" >
+        update System_File
+        <set>
+            <if test="SF_CreateTime != null" >
+                SF_CreateTime = #{SF_CreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="SF_CreateUser != null" >
+                SF_CreateUser = #{SF_CreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="SF_State != null" >
+                SF_State = #{SF_State,jdbcType=CHAR},
+            </if>
+            <if test="SF_BussinessCode != null" >
+                SF_BussinessCode = #{SF_BussinessCode,jdbcType=VARCHAR},
+            </if>
+            <if test="SF_FileType != null" >
+                SF_FileType = #{SF_FileType,jdbcType=VARCHAR},
+            </if>
+            <if test="SF_FileName != null" >
+                SF_FileName = #{SF_FileName,jdbcType=VARCHAR},
+            </if>
+            <if test="SF_Path != null" >
+                SF_Path = #{SF_Path,jdbcType=VARCHAR},
+            </if>
+            <if test="SF_TempPath != null" >
+                SF_TempPath = #{SF_TempPath,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where SF_Code = #{SF_Code,jdbcType=VARCHAR}
+    </update> 
+    
+    <delete id="delete1" parameterType="java.lang.String" >
+        DELETE FROM System_File
+        WHERE SF_Code = #{SF_Code,jdbcType=VARCHAR}
+    </delete>
+</mapper>

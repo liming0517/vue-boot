@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wiserun.develop.messageconfig.mapper.MessageConfigMapper" >
+
+    <resultMap id="BaseResultMap" type="com.wiserun.develop.messageconfig.model.MessageConfig" >
+   		<!-- 通知配置编号 -->
+        <result column="SMC_Code" property="SMC_Code" jdbcType="VARCHAR" />
+        <!-- 创建时间 -->
+        <result column="SMC_CreateTime" property="SMC_CreateTime" jdbcType="VARCHAR" />
+        <!-- 创建人 -->
+        <result column="SMC_CreateUser" property="SMC_CreateUser" jdbcType="VARCHAR" />
+        <!--  状态 -->
+        <result column="SMC_State" property="SMC_State" jdbcType="CHAR" />
+        <!-- 通知内容 -->
+        <result column="SMC_Content" property="SMC_Content" jdbcType="VARCHAR" />
+        <!-- 关联模块 -->
+        <result column="SMC_Model" property="SMC_Model" jdbcType="VARCHAR" />
+        <!--  关联模块的操作 -->
+        <result column="SMC_Operate" property="SMC_Operate" jdbcType="VARCHAR" />
+  		<!-- 详情地址 -->
+        <result column="SMC_URL" property="SMC_URL" jdbcType="VARCHAR" />
+        <!-- 被通知人 -->
+        <result column="SMC_Notified" property="SMC_Notified" jdbcType="VARCHAR" />
+        <!-- 版本号 -->
+        <result column="SMC_Version" property="SMC_Version" jdbcType="VARCHAR" />
+        <!-- 创建开始时间 -->
+        <result column="SMC_CreateTimeStart" property="SMC_CreateTimeStart" jdbcType="VARCHAR" />
+        <!-- 创建结束时间 -->
+        <result column="SMC_CreateTimeEnd" property="SMC_CreateTimeEnd" jdbcType="VARCHAR" />
+       <!--  模块名 -->
+        <result column="SMC_ModelName" property="SMC_ModelName" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >        <!--  相当于sql语句的* -->
+        `SMC_Code`, `SMC_CreateTime`, `SMC_CreateUser`, `SMC_State`, `SMC_Content`, `SMC_Model`,`SMC_Operate`,`SMC_URL`,`SMC_Notified`,`SMC_Version`
+    </sql>
+
+	<!-- 根据条件查找所有数据并分页 -->
+      <select id="queryPageList" resultMap="BaseResultMap" parameterType="com.wiserun.develop.message.model.Message">
+		    	SELECT *  FROM 
+				(select `SMC_Code`, `SMC_CreateTime`,(SELECT user_name FROM `admin_user` WHERE user_phone=SMC_CreateUser) AS SMC_CreateUser, `SMC_State`, `SMC_Content`,SMC_Model,(select resource_name from  admin_resource  where resource_model=SMC_Model) as  SMC_ModelName,SMC_Operate,`SMC_URL`,`SMC_Notified`,`SMC_Version`
+				from   System_MessageConfig ) as a 
+		    	 <where>              
+		        	<if test="SMC_Model != null" >
+		                AND SMC_Model = #{SMC_Model,jdbcType=VARCHAR}
+		            </if>
+		            <if test="SMC_Version != null" >
+		                AND SMC_Version = #{SMC_Version,jdbcType=VARCHAR}
+		            </if>
+		            <if test="SMC_CreateUser != null" >
+		                AND SMC_CreateUser like "%"#{SMC_CreateUser,jdbcType=VARCHAR}"%"
+		            </if>
+		            <if test="SMC_CreateTimeStart != null and SMC_CreateTimeStart != ''">
+					   	AND SMC_CreateTime &gt; #{SMC_CreateTimeStart}
+					</if> 
+					<if test="SMC_CreateTimeEnd != null and SMC_CreateTimeEnd != ''">
+					   	AND SMC_CreateTime &lt; #{SMC_CreateTimeEnd}
+					</if>
+		        </where> 
+		       		 ORDER BY SMC_State ASC  LIMIT ${(page - 1) * size}, ${size}
+    </select>  
+ 
+
+    <!-- 根据条件查找出记录总条数 -->
+    
+      <select id="queryCount" resultType="java.lang.Integer" parameterType="com.wiserun.develop.message.model.Message">
+		    	 SELECT COUNT(*) FROM (SELECT *  FROM 		    	
+				(select `SMC_Code`, `SMC_CreateTime`,(SELECT user_name FROM `admin_user` WHERE user_phone=SMC_CreateUser) AS SMC_CreateUser, `SMC_State`, `SMC_Content`, `SMC_Model`,(select resource_name from  admin_resource  where resource_model=SMC_Model) as  SMC_ModelName, SMC_Operate,`SMC_URL`,`SMC_Notified`,`SMC_Version`
+					FROM  System_MessageConfig) as a
+		    	 <where>              
+		        	<if test="SMC_Model != null" >
+		                AND SMC_Model  = #{SMC_Model,jdbcType=VARCHAR}
+		            </if>
+		            <if test="SMC_Version != null" >
+		                AND SMC_Version = #{SMC_Version,jdbcType=VARCHAR}
+		            </if>
+		            <if test="SMC_CreateUser != null" >
+		                AND SMC_CreateUser like "%"#{SMC_CreateUser,jdbcType=VARCHAR}"%"
+		            </if>
+		            <if test="SMC_CreateTimeStart != null and SMC_CreateTimeStart != ''">
+					   	AND SMC_CreateTime &gt; #{SMC_CreateTimeStart}
+					</if> 
+					<if test="SMC_CreateTimeEnd != null and SMC_CreateTimeEnd != ''">
+					   	AND SMC_CreateTime &lt; #{SMC_CreateTimeEnd}
+					</if>
+		        </where> 
+		       		 ORDER BY SMC_State ASC) as b
+    </select>  
+    
+    <!-- 查找所有关联模块操作 -->
+      <select id="queryOperateList" resultMap="BaseResultMap" parameterType="com.wiserun.develop.message.model.Message">
+			SELECT DISTINCT  * FROM `system_messageconfig`
+    </select>
+     <!-- 根据编号查找出一条详细信息 -->
+     <select id="queryOne1" resultMap="BaseResultMap" parameterType="com.wiserun.develop.messageconfig.model.MessageConfig" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM System_MessageConfig
+        WHERE SMC_Model = #{SMC_Model,jdbcType=VARCHAR} AND SMC_Operate = #{SMC_Operate,jdbcType=VARCHAR} AND SMC_Version=#{SMC_Version,jdbcType=VARCHAR}
+    </select>  
+    <!-- 添加操作 -->
+      <insert id="add" parameterType="com.wiserun.develop.message.model.Message" >
+        INSERT INTO System_MessageConfig					
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="SMC_Code != null" >
+                `SMC_Code`,
+            </if>
+            <if test="SMC_CreateTime != null" >
+                `SMC_CreateTime`,
+            </if>
+            <if test="SMC_CreateUser != null" >
+                `SMC_CreateUser`,
+            </if>
+            <if test="SMC_State != null" >
+                `SMC_State`,
+            </if>
+            <if test="SMC_Content != null" >
+                `SMC_Content`,
+            </if>
+            <if test="SMC_Model != null" >
+                `SMC_Model`,
+            </if>
+            <if test="SMC_Operate != null" >
+                `SMC_Operate`,
+            </if>
+            <if test="SMC_URL != null" >
+                `SMC_URL`,
+            </if>
+            <if test="SMC_Notified != null" >
+                `SMC_Notified`,
+            </if>
+            <if test="SMC_Version != null" >
+                `SMC_Version`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="SMC_Code != null" >
+                #{SMC_Code,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_CreateTime != null" >
+                #{SMC_CreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_CreateUser != null" >
+                #{SMC_CreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_State != null" >
+                #{SMC_State,jdbcType=CHAR},
+            </if>
+            <if test="SMC_Content != null" >
+                #{SMC_Content,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_Model != null" >
+                #{SMC_Model,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_Operate != null" >
+                #{SMC_Operate,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_URL != null" >
+                #{SMC_URL,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_Notified != null" >
+                #{SMC_Notified,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_Version != null" >
+                #{SMC_Version,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>  
+    
+    
+    <!-- 更新方法 -->
+     <update id="update" parameterType="com.wiserun.develop.messageconfig.model.MessageConfig" >
+        update System_MessageConfig
+        <set>
+            <if test="SMC_CreateTime != null" >
+                SMC_CreateTime = #{SMC_CreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_CreateUser != null" >
+                SMC_CreateUser = #{SMC_CreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_State != null" >
+                SMC_State = #{SMC_State,jdbcType=CHAR},
+            </if>
+            <if test="SMC_Content != null" >
+                SMC_Content = #{SMC_Content,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_Model != null" >
+                SMC_Model = #{SMC_Model,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_Operate != null" >
+                SMC_Operate = #{SMC_Operate,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_URL != null" >
+                SMC_URL = #{SMC_URL,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_Notified != null" >
+                SMC_Notified = #{SMC_Notified,jdbcType=VARCHAR},
+            </if>
+            <if test="SMC_Version != null" >
+                SMC_Version = #{SMC_Version,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where SMC_Code = #{SMC_Code,jdbcType=VARCHAR}
+    </update> 
+    
+    <delete id="delete1" parameterType="java.lang.String" >
+        DELETE FROM System_MessageConfig
+        WHERE SMC_Code = #{SMC_Code,jdbcType=VARCHAR}
+    </delete>
+</mapper>

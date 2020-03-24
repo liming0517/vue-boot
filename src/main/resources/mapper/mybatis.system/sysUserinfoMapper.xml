@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--此处的文件路径可能会有所出入，请根据实际情况修改-->
+<!--
+创建人：代码生成器
+Create date: **请补充**
+功能说明：sys.userinfo 相关操作
+修订信息(**请补充**)
+修订日期:**请补充**
+原因:**请补充**
+修订人:**请补充**
+-->
+<mapper namespace="com.wiserun.devolop.system.dao.SysUserinfoDao">
+	<resultMap id="queryResultMap" type="com.wiserun.devolop.system.entity.SysUserinfo">
+		<!-- 用户id -->
+		<result column="id" property="id" jdbcType="NVARCHAR"/>
+		<!-- 创建人部门ID -->
+		<result column="createDeptId" property="createDeptId" jdbcType="NVARCHAR"/>
+		<!-- 创建人部门编号 -->
+		<result column="createDeptCode" property="createDeptCode" jdbcType="NVARCHAR"/>
+		<!-- 创建人部门名称 -->
+		<result column="createDeptName" property="createDeptName" jdbcType="NVARCHAR"/>
+		<!-- 创建人分部ID -->
+		<result column="createAreaId" property="createAreaId" jdbcType="NVARCHAR"/>
+		<!-- 创建人分部编号 -->
+		<result column="createAreaCode" property="createAreaCode" jdbcType="NVARCHAR"/>
+		<!-- 创建人分部名称 -->
+		<result column="createAreaName" property="createAreaName" jdbcType="NVARCHAR"/>
+		<!-- 创建人Id -->
+		<result column="createUserID" property="createUserID" jdbcType="NVARCHAR"/>
+		<!-- 创建人编号 -->
+		<result column="createUserCode" property="createUserCode" jdbcType="NVARCHAR"/>
+		<!-- 创建人名字 -->
+		<result column="createUserName" property="createUserName" jdbcType="NVARCHAR"/>
+		<!-- 创建时间 -->
+		<result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+		<!-- 更新人Id -->
+		<result column="updateUserID" property="updateUserID" jdbcType="NVARCHAR"/>
+		<!-- 更新人用户编号 -->
+		<result column="updateUserCode" property="updateUserCode" jdbcType="NVARCHAR"/>
+		<!-- 更新人名字 -->
+		<result column="updateUserName" property="updateUserName" jdbcType="NVARCHAR"/>
+		<!-- 最近更新时间 -->
+		<result column="updateDate" property="updateDate" jdbcType="TIMESTAMP"/>
+		<!-- 排序 -->
+		<result column="rowOrder" property="rowOrder" jdbcType="INTEGER"/>
+		<!-- 备注 -->
+		<result column="remark" property="remark" jdbcType="NVARCHAR"/>
+		<!-- 状态 -->
+		<result column="state" property="state" jdbcType="NVARCHAR"/>
+		<!-- 用户名 -->
+		<result column="username" property="username" jdbcType="NVARCHAR"/>
+		<!-- 密码 -->
+		<result column="password" property="password" jdbcType="NVARCHAR"/>
+		<!-- 最近登录时间 -->
+		<result column="lastlogindate" property="lastlogindate" jdbcType="TIMESTAMP"/>
+		<!-- 真实姓名 -->
+		<result column="trueName" property="trueName" jdbcType="NVARCHAR"/>
+		<!-- 用户编号 -->
+		<result column="usercode" property="usercode" jdbcType="NVARCHAR"/>
+		<!-- 手机号 -->
+		<result column="phoneNo" property="phoneNo" jdbcType="NCHAR"/>
+		<!-- 身份证号 -->
+		<result column="idnumber" property="idnumber" jdbcType="NVARCHAR"/>
+		<!-- 微信号 -->
+		<result column="weixinNo" property="weixinNo" jdbcType="NVARCHAR"/>
+		<!-- 登录名（昵称） -->
+		<result column="loginName" property="loginName" jdbcType="NVARCHAR"/>
+		<!-- 头像 -->
+		<result column="headPortrait" property="headPortrait" jdbcType="NVARCHAR"/>
+		<!-- 扩展1 -->
+		<result column="ext1" property="ext1" jdbcType="NVARCHAR"/>
+		<!-- 扩展2 -->
+		<result column="ext2" property="ext2" jdbcType="NVARCHAR"/>
+		<!-- 主部门ID -->
+		<result column="mainDeptId" property="mainDeptId" jdbcType="NVARCHAR"/>
+		<!-- 主部门编号 -->
+		<result column="mainDeptCode" property="mainDeptCode" jdbcType="NVARCHAR"/>
+		<!-- 主部门名称 -->
+		<result column="mainDeptName" property="mainDeptName" jdbcType="NVARCHAR"/>
+		<!-- 主角色ID -->
+		<result column="mainRoleId" property="mainRoleId" jdbcType="NVARCHAR"/>
+		<!-- 主角色编号 -->
+		<result column="mainRoleCode" property="mainRoleCode" jdbcType="NVARCHAR"/>
+		<!-- 主角色名称 -->
+		<result column="mainRoleName" property="mainRoleName" jdbcType="NVARCHAR"/>
+	</resultMap>
+	<!-- 聚合查询 -->
+	<select id="findProjection" parameterType="com.wiserun.common.expression.projection.ProjectionQuery" resultType="java.util.HashMap">SELECT 
+		<include refid="expressionBlock.projectionColumn"/> FROM sys_userinfo t 
+		<include refid="expressionBlock.where"/>  
+		<include refid="expressionBlock.groupBy"/>  
+		<include refid="expressionBlock.having"/>  
+		<if test="order != null">ORDER BY ${order}</if> 
+	</select>
+	<!-- 根据条件查询记录 -->
+	<select id="find" parameterType="com.wiserun.common.expression.ExpressionQuery" resultMap="queryResultMap"> 
+		<if test="!isQueryAll">SELECT * FROM (</if> SELECT 
+		<if test="!isQueryAll"> 
+			<choose>
+				<when test="sortname == null">Row_Number() OVER(ORDER BY t.createDate desc) as RowNumber,</when>
+				<otherwise>Row_Number() OVER(ORDER BY ${order}) as RowNumber,</otherwise>
+			</choose> 
+		</if>  
+		<choose>
+			<when test="columns.size&gt;0"> 
+				<foreach collection="columns" item="column" separator=",">${column}</foreach> 
+			</when>
+			<otherwise>t.id , t.createDeptId , t.createDeptCode , t.createDeptName , t.createAreaId , t.createAreaCode , t.createAreaName , t.createUserID , t.createUserCode , t.createUserName , t.createDate , t.updateUserID , t.updateUserCode , t.updateUserName , t.updateDate , t.rowOrder , t.remark , t.state , t.username , t.password , t.lastlogindate , t.trueName , t.usercode , t.phoneNo , t.idnumber , t.weixinNo , t.loginName , t.headPortrait , t.ext1 , t.ext2 , t.mainDeptId , t.mainDeptCode , t.mainDeptName , t.mainRoleId , t.mainRoleCode , t.mainRoleName</otherwise>
+		</choose> FROM sys_userinfo t
+		<include refid="expressionBlock.where"/>  
+		<if test="!isQueryAll">
+			<!-- 是否需要分页 --> ) as a WHERE RowNumber between #{firstResult,jdbcType=INTEGER}+1 and #{firstResult,jdbcType=INTEGER}+#{pageSize,jdbcType=INTEGER}
+		</if> 
+	</select>
+	<!-- 根据条件查询记录数 -->
+	<select id="findTotalCount" parameterType="com.wiserun.common.expression.ExpressionQuery" resultType="java.lang.Integer">SELECT count(*) FROM sys_userinfo t 
+		<include refid="expressionBlock.where"/> 
+	</select>
+	<!-- 保存,保存全部字段 -->
+	<insert id="insert" parameterType="com.wiserun.devolop.system.entity.SysUserinfo">INSERT INTO sys_userinfo ( id , createDeptId , createDeptCode , createDeptName , createAreaId , createAreaCode , createAreaName , createUserID , createUserCode , createUserName , createDate , updateUserID , updateUserCode , updateUserName , updateDate , rowOrder , remark , state , username , password , lastlogindate , trueName , usercode , phoneNo , idnumber , weixinNo , loginName , headPortrait , ext1 , ext2 , mainDeptId , mainDeptCode , mainDeptName , mainRoleId , mainRoleCode , mainRoleName ) VALUES ( #{id,jdbcType=NVARCHAR} , #{createDeptId,jdbcType=NVARCHAR} , #{createDeptCode,jdbcType=NVARCHAR} , #{createDeptName,jdbcType=NVARCHAR} , #{createAreaId,jdbcType=NVARCHAR} , #{createAreaCode,jdbcType=NVARCHAR} , #{createAreaName,jdbcType=NVARCHAR} , #{createUserID,jdbcType=NVARCHAR} , #{createUserCode,jdbcType=NVARCHAR} , #{createUserName,jdbcType=NVARCHAR} , #{createDate,jdbcType=TIMESTAMP} , #{updateUserID,jdbcType=NVARCHAR} , #{updateUserCode,jdbcType=NVARCHAR} , #{updateUserName,jdbcType=NVARCHAR} , #{updateDate,jdbcType=TIMESTAMP} , #{rowOrder,jdbcType=INTEGER} , #{remark,jdbcType=NVARCHAR} , #{state,jdbcType=NVARCHAR} , #{username,jdbcType=NVARCHAR} , #{password,jdbcType=NVARCHAR} , #{lastlogindate,jdbcType=TIMESTAMP} , #{trueName,jdbcType=NVARCHAR} , #{usercode,jdbcType=NVARCHAR} , #{phoneNo,jdbcType=NCHAR} , #{idnumber,jdbcType=NVARCHAR} , #{weixinNo,jdbcType=NVARCHAR} , #{loginName,jdbcType=NVARCHAR} , #{headPortrait,jdbcType=NVARCHAR} , #{ext1,jdbcType=NVARCHAR} , #{ext2,jdbcType=NVARCHAR} , #{mainDeptId,jdbcType=NVARCHAR} , #{mainDeptCode,jdbcType=NVARCHAR} , #{mainDeptName,jdbcType=NVARCHAR} , #{mainRoleId,jdbcType=NVARCHAR} , #{mainRoleCode,jdbcType=NVARCHAR} , #{mainRoleName,jdbcType=NVARCHAR} )</insert>
+	<!-- 保存,保存不为NULL的字段 -->
+	<insert id="insertNotNull" parameterType="com.wiserun.devolop.system.entity.SysUserinfo">INSERT INTO sys_userinfo 
+		<trim prefix="(" suffix=")" suffixOverrides=","> 
+			<if test="id != null">id,</if>  
+			<if test="createDeptId != null">createDeptId,</if>  
+			<if test="createDeptCode != null">createDeptCode,</if>  
+			<if test="createDeptName != null">createDeptName,</if>  
+			<if test="createAreaId != null">createAreaId,</if>  
+			<if test="createAreaCode != null">createAreaCode,</if>  
+			<if test="createAreaName != null">createAreaName,</if>  
+			<if test="createUserID != null">createUserID,</if>  
+			<if test="createUserCode != null">createUserCode,</if>  
+			<if test="createUserName != null">createUserName,</if>  
+			<if test="createDate != null">createDate,</if>  
+			<if test="updateUserID != null">updateUserID,</if>  
+			<if test="updateUserCode != null">updateUserCode,</if>  
+			<if test="updateUserName != null">updateUserName,</if>  
+			<if test="updateDate != null">updateDate,</if>  
+			<if test="rowOrder != null">rowOrder,</if>  
+			<if test="remark != null">remark,</if>  
+			<if test="state != null">state,</if>  
+			<if test="username != null">username,</if>  
+			<if test="password != null">password,</if>  
+			<if test="lastlogindate != null">lastlogindate,</if>  
+			<if test="trueName != null">trueName,</if>  
+			<if test="usercode != null">usercode,</if>  
+			<if test="phoneNo != null">phoneNo,</if>  
+			<if test="idnumber != null">idnumber,</if>  
+			<if test="weixinNo != null">weixinNo,</if>  
+			<if test="loginName != null">loginName,</if>  
+			<if test="headPortrait != null">headPortrait,</if>  
+			<if test="ext1 != null">ext1,</if>  
+			<if test="ext2 != null">ext2,</if>  
+			<if test="mainDeptId != null">mainDeptId,</if>  
+			<if test="mainDeptCode != null">mainDeptCode,</if>  
+			<if test="mainDeptName != null">mainDeptName,</if>  
+			<if test="mainRoleId != null">mainRoleId,</if>  
+			<if test="mainRoleCode != null">mainRoleCode,</if>  
+			<if test="mainRoleName != null">mainRoleName,</if> 
+		</trim>  
+		<trim prefix="values (" suffix=")" suffixOverrides=","> 
+			<if test="id != null">#{id,jdbcType=NVARCHAR},</if>  
+			<if test="createDeptId != null">#{createDeptId,jdbcType=NVARCHAR},</if>  
+			<if test="createDeptCode != null">#{createDeptCode,jdbcType=NVARCHAR},</if>  
+			<if test="createDeptName != null">#{createDeptName,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaId != null">#{createAreaId,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaCode != null">#{createAreaCode,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaName != null">#{createAreaName,jdbcType=NVARCHAR},</if>  
+			<if test="createUserID != null">#{createUserID,jdbcType=NVARCHAR},</if>  
+			<if test="createUserCode != null">#{createUserCode,jdbcType=NVARCHAR},</if>  
+			<if test="createUserName != null">#{createUserName,jdbcType=NVARCHAR},</if>  
+			<if test="createDate != null">#{createDate,jdbcType=TIMESTAMP},</if>  
+			<if test="updateUserID != null">#{updateUserID,jdbcType=NVARCHAR},</if>  
+			<if test="updateUserCode != null">#{updateUserCode,jdbcType=NVARCHAR},</if>  
+			<if test="updateUserName != null">#{updateUserName,jdbcType=NVARCHAR},</if>  
+			<if test="updateDate != null">#{updateDate,jdbcType=TIMESTAMP},</if>  
+			<if test="rowOrder != null">#{rowOrder,jdbcType=INTEGER},</if>  
+			<if test="remark != null">#{remark,jdbcType=NVARCHAR},</if>  
+			<if test="state != null">#{state,jdbcType=NVARCHAR},</if>  
+			<if test="username != null">#{username,jdbcType=NVARCHAR},</if>  
+			<if test="password != null">#{password,jdbcType=NVARCHAR},</if>  
+			<if test="lastlogindate != null">#{lastlogindate,jdbcType=TIMESTAMP},</if>  
+			<if test="trueName != null">#{trueName,jdbcType=NVARCHAR},</if>  
+			<if test="usercode != null">#{usercode,jdbcType=NVARCHAR},</if>  
+			<if test="phoneNo != null">#{phoneNo,jdbcType=NCHAR},</if>  
+			<if test="idnumber != null">#{idnumber,jdbcType=NVARCHAR},</if>  
+			<if test="weixinNo != null">#{weixinNo,jdbcType=NVARCHAR},</if>  
+			<if test="loginName != null">#{loginName,jdbcType=NVARCHAR},</if>  
+			<if test="headPortrait != null">#{headPortrait,jdbcType=NVARCHAR},</if>  
+			<if test="ext1 != null">#{ext1,jdbcType=NVARCHAR},</if>  
+			<if test="ext2 != null">#{ext2,jdbcType=NVARCHAR},</if>  
+			<if test="mainDeptId != null">#{mainDeptId,jdbcType=NVARCHAR},</if>  
+			<if test="mainDeptCode != null">#{mainDeptCode,jdbcType=NVARCHAR},</if>  
+			<if test="mainDeptName != null">#{mainDeptName,jdbcType=NVARCHAR},</if>  
+			<if test="mainRoleId != null">#{mainRoleId,jdbcType=NVARCHAR},</if>  
+			<if test="mainRoleCode != null">#{mainRoleCode,jdbcType=NVARCHAR},</if>  
+			<if test="mainRoleName != null">#{mainRoleName,jdbcType=NVARCHAR},</if> 
+		</trim> 
+	</insert>
+	<!-- 更新,更新全部字段 -->
+	<update id="update" parameterType="com.wiserun.devolop.system.entity.SysUserinfo">UPDATE sys_userinfo 
+		<set>createDeptId=#{createDeptId,jdbcType=NVARCHAR}, createDeptCode=#{createDeptCode,jdbcType=NVARCHAR}, createDeptName=#{createDeptName,jdbcType=NVARCHAR}, createAreaId=#{createAreaId,jdbcType=NVARCHAR}, createAreaCode=#{createAreaCode,jdbcType=NVARCHAR}, createAreaName=#{createAreaName,jdbcType=NVARCHAR}, createUserID=#{createUserID,jdbcType=NVARCHAR}, createUserCode=#{createUserCode,jdbcType=NVARCHAR}, createUserName=#{createUserName,jdbcType=NVARCHAR}, createDate=#{createDate,jdbcType=TIMESTAMP}, updateUserID=#{updateUserID,jdbcType=NVARCHAR}, updateUserCode=#{updateUserCode,jdbcType=NVARCHAR}, updateUserName=#{updateUserName,jdbcType=NVARCHAR}, updateDate=#{updateDate,jdbcType=TIMESTAMP}, rowOrder=#{rowOrder,jdbcType=INTEGER}, remark=#{remark,jdbcType=NVARCHAR}, state=#{state,jdbcType=NVARCHAR}, username=#{username,jdbcType=NVARCHAR}, password=#{password,jdbcType=NVARCHAR}, lastlogindate=#{lastlogindate,jdbcType=TIMESTAMP}, trueName=#{trueName,jdbcType=NVARCHAR}, usercode=#{usercode,jdbcType=NVARCHAR}, phoneNo=#{phoneNo,jdbcType=NCHAR}, idnumber=#{idnumber,jdbcType=NVARCHAR}, weixinNo=#{weixinNo,jdbcType=NVARCHAR}, loginName=#{loginName,jdbcType=NVARCHAR}, headPortrait=#{headPortrait,jdbcType=NVARCHAR}, ext1=#{ext1,jdbcType=NVARCHAR}, ext2=#{ext2,jdbcType=NVARCHAR}, mainDeptId=#{mainDeptId,jdbcType=NVARCHAR}, mainDeptCode=#{mainDeptCode,jdbcType=NVARCHAR}, mainDeptName=#{mainDeptName,jdbcType=NVARCHAR}, mainRoleId=#{mainRoleId,jdbcType=NVARCHAR}, mainRoleCode=#{mainRoleCode,jdbcType=NVARCHAR}, mainRoleName=#{mainRoleName,jdbcType=NVARCHAR},</set> WHERE id = #{id,jdbcType=NVARCHAR}
+	</update>
+	<!-- 根据指定条件更新 -->
+	<update id="updateByExpression">UPDATE sys_userinfo 
+		<set>createDeptId=#{createDeptId,jdbcType=NVARCHAR}, createDeptCode=#{createDeptCode,jdbcType=NVARCHAR}, createDeptName=#{createDeptName,jdbcType=NVARCHAR}, createAreaId=#{createAreaId,jdbcType=NVARCHAR}, createAreaCode=#{createAreaCode,jdbcType=NVARCHAR}, createAreaName=#{createAreaName,jdbcType=NVARCHAR}, createUserID=#{createUserID,jdbcType=NVARCHAR}, createUserCode=#{createUserCode,jdbcType=NVARCHAR}, createUserName=#{createUserName,jdbcType=NVARCHAR}, createDate=#{createDate,jdbcType=TIMESTAMP}, updateUserID=#{updateUserID,jdbcType=NVARCHAR}, updateUserCode=#{updateUserCode,jdbcType=NVARCHAR}, updateUserName=#{updateUserName,jdbcType=NVARCHAR}, updateDate=#{updateDate,jdbcType=TIMESTAMP}, rowOrder=#{rowOrder,jdbcType=INTEGER}, remark=#{remark,jdbcType=NVARCHAR}, state=#{state,jdbcType=NVARCHAR}, username=#{username,jdbcType=NVARCHAR}, password=#{password,jdbcType=NVARCHAR}, lastlogindate=#{lastlogindate,jdbcType=TIMESTAMP}, trueName=#{trueName,jdbcType=NVARCHAR}, usercode=#{usercode,jdbcType=NVARCHAR}, phoneNo=#{phoneNo,jdbcType=NCHAR}, idnumber=#{idnumber,jdbcType=NVARCHAR}, weixinNo=#{weixinNo,jdbcType=NVARCHAR}, loginName=#{loginName,jdbcType=NVARCHAR}, headPortrait=#{headPortrait,jdbcType=NVARCHAR}, ext1=#{ext1,jdbcType=NVARCHAR}, ext2=#{ext2,jdbcType=NVARCHAR}, mainDeptId=#{mainDeptId,jdbcType=NVARCHAR}, mainDeptCode=#{mainDeptCode,jdbcType=NVARCHAR}, mainDeptName=#{mainDeptName,jdbcType=NVARCHAR}, mainRoleId=#{mainRoleId,jdbcType=NVARCHAR}, mainRoleCode=#{mainRoleCode,jdbcType=NVARCHAR}, mainRoleName=#{mainRoleName,jdbcType=NVARCHAR},</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 更新不为NULL的字段 -->
+	<update id="updateNotNull" parameterType="com.wiserun.devolop.system.entity.SysUserinfo">UPDATE sys_userinfo 
+		<set> 
+			<if test="createDeptId != null">createDeptId=#{createDeptId,jdbcType=NVARCHAR},</if>  
+			<if test="createDeptCode != null">createDeptCode=#{createDeptCode,jdbcType=NVARCHAR},</if>  
+			<if test="createDeptName != null">createDeptName=#{createDeptName,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaId != null">createAreaId=#{createAreaId,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaCode != null">createAreaCode=#{createAreaCode,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaName != null">createAreaName=#{createAreaName,jdbcType=NVARCHAR},</if>  
+			<if test="createUserID != null">createUserID=#{createUserID,jdbcType=NVARCHAR},</if>  
+			<if test="createUserCode != null">createUserCode=#{createUserCode,jdbcType=NVARCHAR},</if>  
+			<if test="createUserName != null">createUserName=#{createUserName,jdbcType=NVARCHAR},</if>  
+			<if test="createDate != null">createDate=#{createDate,jdbcType=TIMESTAMP},</if>  
+			<if test="updateUserID != null">updateUserID=#{updateUserID,jdbcType=NVARCHAR},</if>  
+			<if test="updateUserCode != null">updateUserCode=#{updateUserCode,jdbcType=NVARCHAR},</if>  
+			<if test="updateUserName != null">updateUserName=#{updateUserName,jdbcType=NVARCHAR},</if>  
+			<if test="updateDate != null">updateDate=#{updateDate,jdbcType=TIMESTAMP},</if>  
+			<if test="rowOrder != null">rowOrder=#{rowOrder,jdbcType=INTEGER},</if>  
+			<if test="remark != null">remark=#{remark,jdbcType=NVARCHAR},</if>  
+			<if test="state != null">state=#{state,jdbcType=NVARCHAR},</if>  
+			<if test="username != null">username=#{username,jdbcType=NVARCHAR},</if>  
+			<if test="password != null">password=#{password,jdbcType=NVARCHAR},</if>  
+			<if test="lastlogindate != null">lastlogindate=#{lastlogindate,jdbcType=TIMESTAMP},</if>  
+			<if test="trueName != null">trueName=#{trueName,jdbcType=NVARCHAR},</if>  
+			<if test="usercode != null">usercode=#{usercode,jdbcType=NVARCHAR},</if>  
+			<if test="phoneNo != null">phoneNo=#{phoneNo,jdbcType=NCHAR},</if>  
+			<if test="idnumber != null">idnumber=#{idnumber,jdbcType=NVARCHAR},</if>  
+			<if test="weixinNo != null">weixinNo=#{weixinNo,jdbcType=NVARCHAR},</if>  
+			<if test="loginName != null">loginName=#{loginName,jdbcType=NVARCHAR},</if>  
+			<if test="headPortrait != null">headPortrait=#{headPortrait,jdbcType=NVARCHAR},</if>  
+			<if test="ext1 != null">ext1=#{ext1,jdbcType=NVARCHAR},</if>  
+			<if test="ext2 != null">ext2=#{ext2,jdbcType=NVARCHAR},</if>  
+			<if test="mainDeptId != null">mainDeptId=#{mainDeptId,jdbcType=NVARCHAR},</if>  
+			<if test="mainDeptCode != null">mainDeptCode=#{mainDeptCode,jdbcType=NVARCHAR},</if>  
+			<if test="mainDeptName != null">mainDeptName=#{mainDeptName,jdbcType=NVARCHAR},</if>  
+			<if test="mainRoleId != null">mainRoleId=#{mainRoleId,jdbcType=NVARCHAR},</if>  
+			<if test="mainRoleCode != null">mainRoleCode=#{mainRoleCode,jdbcType=NVARCHAR},</if>  
+			<if test="mainRoleName != null">mainRoleName=#{mainRoleName,jdbcType=NVARCHAR},</if> 
+		</set> WHERE id = #{id,jdbcType=NVARCHAR}
+	</update>
+	<!-- 根据指定条件更新不为NULL的字段 -->
+	<update id="updateNotNullByExpression">UPDATE sys_userinfo 
+		<set> 
+			<if test="createDeptId != null">createDeptId=#{createDeptId,jdbcType=NVARCHAR},</if>  
+			<if test="createDeptCode != null">createDeptCode=#{createDeptCode,jdbcType=NVARCHAR},</if>  
+			<if test="createDeptName != null">createDeptName=#{createDeptName,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaId != null">createAreaId=#{createAreaId,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaCode != null">createAreaCode=#{createAreaCode,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaName != null">createAreaName=#{createAreaName,jdbcType=NVARCHAR},</if>  
+			<if test="createUserID != null">createUserID=#{createUserID,jdbcType=NVARCHAR},</if>  
+			<if test="createUserCode != null">createUserCode=#{createUserCode,jdbcType=NVARCHAR},</if>  
+			<if test="createUserName != null">createUserName=#{createUserName,jdbcType=NVARCHAR},</if>  
+			<if test="createDate != null">createDate=#{createDate,jdbcType=TIMESTAMP},</if>  
+			<if test="updateUserID != null">updateUserID=#{updateUserID,jdbcType=NVARCHAR},</if>  
+			<if test="updateUserCode != null">updateUserCode=#{updateUserCode,jdbcType=NVARCHAR},</if>  
+			<if test="updateUserName != null">updateUserName=#{updateUserName,jdbcType=NVARCHAR},</if>  
+			<if test="updateDate != null">updateDate=#{updateDate,jdbcType=TIMESTAMP},</if>  
+			<if test="rowOrder != null">rowOrder=#{rowOrder,jdbcType=INTEGER},</if>  
+			<if test="remark != null">remark=#{remark,jdbcType=NVARCHAR},</if>  
+			<if test="state != null">state=#{state,jdbcType=NVARCHAR},</if>  
+			<if test="username != null">username=#{username,jdbcType=NVARCHAR},</if>  
+			<if test="password != null">password=#{password,jdbcType=NVARCHAR},</if>  
+			<if test="lastlogindate != null">lastlogindate=#{lastlogindate,jdbcType=TIMESTAMP},</if>  
+			<if test="trueName != null">trueName=#{trueName,jdbcType=NVARCHAR},</if>  
+			<if test="usercode != null">usercode=#{usercode,jdbcType=NVARCHAR},</if>  
+			<if test="phoneNo != null">phoneNo=#{phoneNo,jdbcType=NCHAR},</if>  
+			<if test="idnumber != null">idnumber=#{idnumber,jdbcType=NVARCHAR},</if>  
+			<if test="weixinNo != null">weixinNo=#{weixinNo,jdbcType=NVARCHAR},</if>  
+			<if test="loginName != null">loginName=#{loginName,jdbcType=NVARCHAR},</if>  
+			<if test="headPortrait != null">headPortrait=#{headPortrait,jdbcType=NVARCHAR},</if>  
+			<if test="ext1 != null">ext1=#{ext1,jdbcType=NVARCHAR},</if>  
+			<if test="ext2 != null">ext2=#{ext2,jdbcType=NVARCHAR},</if>  
+			<if test="mainDeptId != null">mainDeptId=#{mainDeptId,jdbcType=NVARCHAR},</if>  
+			<if test="mainDeptCode != null">mainDeptCode=#{mainDeptCode,jdbcType=NVARCHAR},</if>  
+			<if test="mainDeptName != null">mainDeptName=#{mainDeptName,jdbcType=NVARCHAR},</if>  
+			<if test="mainRoleId != null">mainRoleId=#{mainRoleId,jdbcType=NVARCHAR},</if>  
+			<if test="mainRoleCode != null">mainRoleCode=#{mainRoleCode,jdbcType=NVARCHAR},</if>  
+			<if test="mainRoleName != null">mainRoleName=#{mainRoleName,jdbcType=NVARCHAR},</if> 
+		</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 根据主键获取单条记录 -->
+	<select id="get" resultMap="queryResultMap" parameterType="com.wiserun.devolop.system.entity.SysUserinfo">SELECT t.id , t.createDeptId , t.createDeptCode , t.createDeptName , t.createAreaId , t.createAreaCode , t.createAreaName , t.createUserID , t.createUserCode , t.createUserName , t.createDate , t.updateUserID , t.updateUserCode , t.updateUserName , t.updateDate , t.rowOrder , t.remark , t.state , t.username , t.password , t.lastlogindate , t.trueName , t.usercode , t.phoneNo , t.idnumber , t.weixinNo , t.loginName , t.headPortrait , t.ext1 , t.ext2 , t.mainDeptId , t.mainDeptCode , t.mainDeptName , t.mainRoleId , t.mainRoleCode , t.mainRoleName FROM sys_userinfo t WHERE id = #{id,jdbcType=NVARCHAR}</select>
+	<!-- 根据条件获取单条记录 -->
+	<select id="getByExpression" resultMap="queryResultMap" parameterType="com.wiserun.common.expression.ExpressionQuery">SELECT t.id , t.createDeptId , t.createDeptCode , t.createDeptName , t.createAreaId , t.createAreaCode , t.createAreaName , t.createUserID , t.createUserCode , t.createUserName , t.createDate , t.updateUserID , t.updateUserCode , t.updateUserName , t.updateDate , t.rowOrder , t.remark , t.state , t.username , t.password , t.lastlogindate , t.trueName , t.usercode , t.phoneNo , t.idnumber , t.weixinNo , t.loginName , t.headPortrait , t.ext1 , t.ext2 , t.mainDeptId , t.mainDeptCode , t.mainDeptName , t.mainRoleId , t.mainRoleCode , t.mainRoleName FROM sys_userinfo t
+		<include refid="expressionBlock.where"/> 
+	</select>
+	<!-- 根据主键删除记录 -->
+	<delete id="del" parameterType="com.wiserun.devolop.system.entity.SysUserinfo">DELETE FROM sys_userinfo WHERE id = #{id,jdbcType=NVARCHAR}</delete>
+	<!-- 根据条件删除记录 -->
+	<delete id="delByExpression" parameterType="com.wiserun.common.expression.ExpressionQuery">DELETE FROM sys_userinfo 
+		<include refid="expressionBlock.where"/> 
+	</delete>
+</mapper>

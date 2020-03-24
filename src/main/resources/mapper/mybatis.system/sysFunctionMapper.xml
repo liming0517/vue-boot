@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--此处的文件路径可能会有所出入，请根据实际情况修改-->
+<!--
+创建人：代码生成器
+Create date: **请补充**
+功能说明：sys.function 相关操作
+修订信息(**请补充**)
+修订日期:**请补充**
+原因:**请补充**
+修订人:**请补充**
+-->
+<mapper namespace="com.wiserun.devolop.system.dao.SysFunctionDao">
+	<resultMap id="queryResultMap" type="com.wiserun.devolop.system.entity.SysFunction">
+		<!-- id -->
+		<result column="id" property="id" jdbcType="NVARCHAR"/>
+		<!-- 创建人部门ID -->
+		<result column="createDeptId" property="createDeptId" jdbcType="NVARCHAR"/>
+		<!-- 创建人部门编号 -->
+		<result column="createDeptCode" property="createDeptCode" jdbcType="NVARCHAR"/>
+		<!-- 创建人部门名称 -->
+		<result column="createDeptName" property="createDeptName" jdbcType="NVARCHAR"/>
+		<!-- 创建人分部ID -->
+		<result column="createAreaId" property="createAreaId" jdbcType="NVARCHAR"/>
+		<!-- 创建人分部编号 -->
+		<result column="createAreaCode" property="createAreaCode" jdbcType="NVARCHAR"/>
+		<!-- 创建人分部名称 -->
+		<result column="createAreaName" property="createAreaName" jdbcType="NVARCHAR"/>
+		<!-- 创建人Id -->
+		<result column="createUserID" property="createUserID" jdbcType="NVARCHAR"/>
+		<!-- 创建人编号 -->
+		<result column="createUserCode" property="createUserCode" jdbcType="NVARCHAR"/>
+		<!-- 创建人名字 -->
+		<result column="createUserName" property="createUserName" jdbcType="NVARCHAR"/>
+		<!-- 创建时间 -->
+		<result column="createDate" property="createDate" jdbcType="TIMESTAMP"/>
+		<!-- 更新人Id -->
+		<result column="updateUserID" property="updateUserID" jdbcType="NVARCHAR"/>
+		<!-- 更新人用户编号 -->
+		<result column="updateUserCode" property="updateUserCode" jdbcType="NVARCHAR"/>
+		<!-- 更新人名字 -->
+		<result column="updateUserName" property="updateUserName" jdbcType="NVARCHAR"/>
+		<!-- 最近更新时间 -->
+		<result column="updateDate" property="updateDate" jdbcType="TIMESTAMP"/>
+		<!-- 排序 -->
+		<result column="rowOrder" property="rowOrder" jdbcType="INTEGER"/>
+		<!-- 备注 -->
+		<result column="remark" property="remark" jdbcType="NVARCHAR"/>
+		<!-- 状态 -->
+		<result column="state" property="state" jdbcType="NVARCHAR"/>
+		<result column="srId" property="srId" jdbcType="NVARCHAR"/>
+		<result column="operateCode" property="operateCode" jdbcType="NVARCHAR"/>
+		<result column="operateName" property="operateName" jdbcType="NVARCHAR"/>
+		<result column="url" property="url" jdbcType="NVARCHAR"/>
+	</resultMap>
+	<!-- 聚合查询 -->
+	<select id="findProjection" parameterType="com.wiserun.common.expression.projection.ProjectionQuery" resultType="java.util.HashMap">SELECT 
+		<include refid="expressionBlock.projectionColumn"/> FROM sys_function t 
+		<include refid="expressionBlock.where"/>  
+		<include refid="expressionBlock.groupBy"/>  
+		<include refid="expressionBlock.having"/>  
+		<if test="order != null">ORDER BY ${order}</if> 
+	</select>
+	<!-- 根据条件查询记录 -->
+	<select id="find" parameterType="com.wiserun.common.expression.ExpressionQuery" resultMap="queryResultMap"> 
+		<if test="!isQueryAll">SELECT * FROM (</if> SELECT 
+		<if test="!isQueryAll"> 
+			<choose>
+				<when test="sortname == null">Row_Number() OVER(ORDER BY t.createDate desc) as RowNumber,</when>
+				<otherwise>Row_Number() OVER(ORDER BY ${order}) as RowNumber,</otherwise>
+			</choose> 
+		</if>  
+		<choose>
+			<when test="columns.size&gt;0"> 
+				<foreach collection="columns" item="column" separator=",">${column}</foreach> 
+			</when>
+			<otherwise>t.id , t.createDeptId , t.createDeptCode , t.createDeptName , t.createAreaId , t.createAreaCode , t.createAreaName , t.createUserID , t.createUserCode , t.createUserName , t.createDate , t.updateUserID , t.updateUserCode , t.updateUserName , t.updateDate , t.rowOrder , t.remark , t.state , t.srId , t.operateCode , t.operateName , t.url</otherwise>
+		</choose> FROM sys_function t
+		<include refid="expressionBlock.where"/>  
+		<if test="!isQueryAll">
+			<!-- 是否需要分页 --> ) as a WHERE RowNumber between #{firstResult,jdbcType=INTEGER}+1 and #{firstResult,jdbcType=INTEGER}+#{pageSize,jdbcType=INTEGER}
+		</if> 
+	</select>
+	<!-- 根据条件查询记录数 -->
+	<select id="findTotalCount" parameterType="com.wiserun.common.expression.ExpressionQuery" resultType="java.lang.Integer">SELECT count(*) FROM sys_function t 
+		<include refid="expressionBlock.where"/> 
+	</select>
+	<!-- 保存,保存全部字段 -->
+	<insert id="insert" parameterType="com.wiserun.devolop.system.entity.SysFunction">INSERT INTO sys_function ( id , createDeptId , createDeptCode , createDeptName , createAreaId , createAreaCode , createAreaName , createUserID , createUserCode , createUserName , createDate , updateUserID , updateUserCode , updateUserName , updateDate , rowOrder , remark , state , srId , operateCode , operateName , url ) VALUES ( #{id,jdbcType=NVARCHAR} , #{createDeptId,jdbcType=NVARCHAR} , #{createDeptCode,jdbcType=NVARCHAR} , #{createDeptName,jdbcType=NVARCHAR} , #{createAreaId,jdbcType=NVARCHAR} , #{createAreaCode,jdbcType=NVARCHAR} , #{createAreaName,jdbcType=NVARCHAR} , #{createUserID,jdbcType=NVARCHAR} , #{createUserCode,jdbcType=NVARCHAR} , #{createUserName,jdbcType=NVARCHAR} , #{createDate,jdbcType=TIMESTAMP} , #{updateUserID,jdbcType=NVARCHAR} , #{updateUserCode,jdbcType=NVARCHAR} , #{updateUserName,jdbcType=NVARCHAR} , #{updateDate,jdbcType=TIMESTAMP} , #{rowOrder,jdbcType=INTEGER} , #{remark,jdbcType=NVARCHAR} , #{state,jdbcType=NVARCHAR} , #{srId,jdbcType=NVARCHAR} , #{operateCode,jdbcType=NVARCHAR} , #{operateName,jdbcType=NVARCHAR} , #{url,jdbcType=NVARCHAR} )</insert>
+	<!-- 保存,保存不为NULL的字段 -->
+	<insert id="insertNotNull" parameterType="com.wiserun.devolop.system.entity.SysFunction">INSERT INTO sys_function 
+		<trim prefix="(" suffix=")" suffixOverrides=","> 
+			<if test="id != null">id,</if>  
+			<if test="createDeptId != null">createDeptId,</if>  
+			<if test="createDeptCode != null">createDeptCode,</if>  
+			<if test="createDeptName != null">createDeptName,</if>  
+			<if test="createAreaId != null">createAreaId,</if>  
+			<if test="createAreaCode != null">createAreaCode,</if>  
+			<if test="createAreaName != null">createAreaName,</if>  
+			<if test="createUserID != null">createUserID,</if>  
+			<if test="createUserCode != null">createUserCode,</if>  
+			<if test="createUserName != null">createUserName,</if>  
+			<if test="createDate != null">createDate,</if>  
+			<if test="updateUserID != null">updateUserID,</if>  
+			<if test="updateUserCode != null">updateUserCode,</if>  
+			<if test="updateUserName != null">updateUserName,</if>  
+			<if test="updateDate != null">updateDate,</if>  
+			<if test="rowOrder != null">rowOrder,</if>  
+			<if test="remark != null">remark,</if>  
+			<if test="state != null">state,</if>  
+			<if test="srId != null">srId,</if>  
+			<if test="operateCode != null">operateCode,</if>  
+			<if test="operateName != null">operateName,</if>  
+			<if test="url != null">url,</if> 
+		</trim>  
+		<trim prefix="values (" suffix=")" suffixOverrides=","> 
+			<if test="id != null">#{id,jdbcType=NVARCHAR},</if>  
+			<if test="createDeptId != null">#{createDeptId,jdbcType=NVARCHAR},</if>  
+			<if test="createDeptCode != null">#{createDeptCode,jdbcType=NVARCHAR},</if>  
+			<if test="createDeptName != null">#{createDeptName,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaId != null">#{createAreaId,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaCode != null">#{createAreaCode,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaName != null">#{createAreaName,jdbcType=NVARCHAR},</if>  
+			<if test="createUserID != null">#{createUserID,jdbcType=NVARCHAR},</if>  
+			<if test="createUserCode != null">#{createUserCode,jdbcType=NVARCHAR},</if>  
+			<if test="createUserName != null">#{createUserName,jdbcType=NVARCHAR},</if>  
+			<if test="createDate != null">#{createDate,jdbcType=TIMESTAMP},</if>  
+			<if test="updateUserID != null">#{updateUserID,jdbcType=NVARCHAR},</if>  
+			<if test="updateUserCode != null">#{updateUserCode,jdbcType=NVARCHAR},</if>  
+			<if test="updateUserName != null">#{updateUserName,jdbcType=NVARCHAR},</if>  
+			<if test="updateDate != null">#{updateDate,jdbcType=TIMESTAMP},</if>  
+			<if test="rowOrder != null">#{rowOrder,jdbcType=INTEGER},</if>  
+			<if test="remark != null">#{remark,jdbcType=NVARCHAR},</if>  
+			<if test="state != null">#{state,jdbcType=NVARCHAR},</if>  
+			<if test="srId != null">#{srId,jdbcType=NVARCHAR},</if>  
+			<if test="operateCode != null">#{operateCode,jdbcType=NVARCHAR},</if>  
+			<if test="operateName != null">#{operateName,jdbcType=NVARCHAR},</if>  
+			<if test="url != null">#{url,jdbcType=NVARCHAR},</if> 
+		</trim> 
+	</insert>
+	<!-- 更新,更新全部字段 -->
+	<update id="update" parameterType="com.wiserun.devolop.system.entity.SysFunction">UPDATE sys_function 
+		<set>createDeptId=#{createDeptId,jdbcType=NVARCHAR}, createDeptCode=#{createDeptCode,jdbcType=NVARCHAR}, createDeptName=#{createDeptName,jdbcType=NVARCHAR}, createAreaId=#{createAreaId,jdbcType=NVARCHAR}, createAreaCode=#{createAreaCode,jdbcType=NVARCHAR}, createAreaName=#{createAreaName,jdbcType=NVARCHAR}, createUserID=#{createUserID,jdbcType=NVARCHAR}, createUserCode=#{createUserCode,jdbcType=NVARCHAR}, createUserName=#{createUserName,jdbcType=NVARCHAR}, createDate=#{createDate,jdbcType=TIMESTAMP}, updateUserID=#{updateUserID,jdbcType=NVARCHAR}, updateUserCode=#{updateUserCode,jdbcType=NVARCHAR}, updateUserName=#{updateUserName,jdbcType=NVARCHAR}, updateDate=#{updateDate,jdbcType=TIMESTAMP}, rowOrder=#{rowOrder,jdbcType=INTEGER}, remark=#{remark,jdbcType=NVARCHAR}, state=#{state,jdbcType=NVARCHAR}, srId=#{srId,jdbcType=NVARCHAR}, operateCode=#{operateCode,jdbcType=NVARCHAR}, operateName=#{operateName,jdbcType=NVARCHAR}, url=#{url,jdbcType=NVARCHAR},</set> WHERE id = #{id,jdbcType=NVARCHAR}
+	</update>
+	<!-- 根据指定条件更新 -->
+	<update id="updateByExpression">UPDATE sys_function 
+		<set>createDeptId=#{createDeptId,jdbcType=NVARCHAR}, createDeptCode=#{createDeptCode,jdbcType=NVARCHAR}, createDeptName=#{createDeptName,jdbcType=NVARCHAR}, createAreaId=#{createAreaId,jdbcType=NVARCHAR}, createAreaCode=#{createAreaCode,jdbcType=NVARCHAR}, createAreaName=#{createAreaName,jdbcType=NVARCHAR}, createUserID=#{createUserID,jdbcType=NVARCHAR}, createUserCode=#{createUserCode,jdbcType=NVARCHAR}, createUserName=#{createUserName,jdbcType=NVARCHAR}, createDate=#{createDate,jdbcType=TIMESTAMP}, updateUserID=#{updateUserID,jdbcType=NVARCHAR}, updateUserCode=#{updateUserCode,jdbcType=NVARCHAR}, updateUserName=#{updateUserName,jdbcType=NVARCHAR}, updateDate=#{updateDate,jdbcType=TIMESTAMP}, rowOrder=#{rowOrder,jdbcType=INTEGER}, remark=#{remark,jdbcType=NVARCHAR}, state=#{state,jdbcType=NVARCHAR}, srId=#{srId,jdbcType=NVARCHAR}, operateCode=#{operateCode,jdbcType=NVARCHAR}, operateName=#{operateName,jdbcType=NVARCHAR}, url=#{url,jdbcType=NVARCHAR},</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 更新不为NULL的字段 -->
+	<update id="updateNotNull" parameterType="com.wiserun.devolop.system.entity.SysFunction">UPDATE sys_function 
+		<set> 
+			<if test="createDeptId != null">createDeptId=#{createDeptId,jdbcType=NVARCHAR},</if>  
+			<if test="createDeptCode != null">createDeptCode=#{createDeptCode,jdbcType=NVARCHAR},</if>  
+			<if test="createDeptName != null">createDeptName=#{createDeptName,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaId != null">createAreaId=#{createAreaId,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaCode != null">createAreaCode=#{createAreaCode,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaName != null">createAreaName=#{createAreaName,jdbcType=NVARCHAR},</if>  
+			<if test="createUserID != null">createUserID=#{createUserID,jdbcType=NVARCHAR},</if>  
+			<if test="createUserCode != null">createUserCode=#{createUserCode,jdbcType=NVARCHAR},</if>  
+			<if test="createUserName != null">createUserName=#{createUserName,jdbcType=NVARCHAR},</if>  
+			<if test="createDate != null">createDate=#{createDate,jdbcType=TIMESTAMP},</if>  
+			<if test="updateUserID != null">updateUserID=#{updateUserID,jdbcType=NVARCHAR},</if>  
+			<if test="updateUserCode != null">updateUserCode=#{updateUserCode,jdbcType=NVARCHAR},</if>  
+			<if test="updateUserName != null">updateUserName=#{updateUserName,jdbcType=NVARCHAR},</if>  
+			<if test="updateDate != null">updateDate=#{updateDate,jdbcType=TIMESTAMP},</if>  
+			<if test="rowOrder != null">rowOrder=#{rowOrder,jdbcType=INTEGER},</if>  
+			<if test="remark != null">remark=#{remark,jdbcType=NVARCHAR},</if>  
+			<if test="state != null">state=#{state,jdbcType=NVARCHAR},</if>  
+			<if test="srId != null">srId=#{srId,jdbcType=NVARCHAR},</if>  
+			<if test="operateCode != null">operateCode=#{operateCode,jdbcType=NVARCHAR},</if>  
+			<if test="operateName != null">operateName=#{operateName,jdbcType=NVARCHAR},</if>  
+			<if test="url != null">url=#{url,jdbcType=NVARCHAR},</if> 
+		</set> WHERE id = #{id,jdbcType=NVARCHAR}
+	</update>
+	<!-- 根据指定条件更新不为NULL的字段 -->
+	<update id="updateNotNullByExpression">UPDATE sys_function 
+		<set> 
+			<if test="createDeptId != null">createDeptId=#{createDeptId,jdbcType=NVARCHAR},</if>  
+			<if test="createDeptCode != null">createDeptCode=#{createDeptCode,jdbcType=NVARCHAR},</if>  
+			<if test="createDeptName != null">createDeptName=#{createDeptName,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaId != null">createAreaId=#{createAreaId,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaCode != null">createAreaCode=#{createAreaCode,jdbcType=NVARCHAR},</if>  
+			<if test="createAreaName != null">createAreaName=#{createAreaName,jdbcType=NVARCHAR},</if>  
+			<if test="createUserID != null">createUserID=#{createUserID,jdbcType=NVARCHAR},</if>  
+			<if test="createUserCode != null">createUserCode=#{createUserCode,jdbcType=NVARCHAR},</if>  
+			<if test="createUserName != null">createUserName=#{createUserName,jdbcType=NVARCHAR},</if>  
+			<if test="createDate != null">createDate=#{createDate,jdbcType=TIMESTAMP},</if>  
+			<if test="updateUserID != null">updateUserID=#{updateUserID,jdbcType=NVARCHAR},</if>  
+			<if test="updateUserCode != null">updateUserCode=#{updateUserCode,jdbcType=NVARCHAR},</if>  
+			<if test="updateUserName != null">updateUserName=#{updateUserName,jdbcType=NVARCHAR},</if>  
+			<if test="updateDate != null">updateDate=#{updateDate,jdbcType=TIMESTAMP},</if>  
+			<if test="rowOrder != null">rowOrder=#{rowOrder,jdbcType=INTEGER},</if>  
+			<if test="remark != null">remark=#{remark,jdbcType=NVARCHAR},</if>  
+			<if test="state != null">state=#{state,jdbcType=NVARCHAR},</if>  
+			<if test="srId != null">srId=#{srId,jdbcType=NVARCHAR},</if>  
+			<if test="operateCode != null">operateCode=#{operateCode,jdbcType=NVARCHAR},</if>  
+			<if test="operateName != null">operateName=#{operateName,jdbcType=NVARCHAR},</if>  
+			<if test="url != null">url=#{url,jdbcType=NVARCHAR},</if> 
+		</set>  
+		<include refid="expressionBlock.updateWhere"/> 
+	</update>
+	<!-- 根据主键获取单条记录 -->
+	<select id="get" resultMap="queryResultMap" parameterType="com.wiserun.devolop.system.entity.SysFunction">SELECT t.id , t.createDeptId , t.createDeptCode , t.createDeptName , t.createAreaId , t.createAreaCode , t.createAreaName , t.createUserID , t.createUserCode , t.createUserName , t.createDate , t.updateUserID , t.updateUserCode , t.updateUserName , t.updateDate , t.rowOrder , t.remark , t.state , t.srId , t.operateCode , t.operateName , t.url FROM sys_function t WHERE id = #{id,jdbcType=NVARCHAR}</select>
+	<!-- 根据条件获取单条记录 -->
+	<select id="getByExpression" resultMap="queryResultMap" parameterType="com.wiserun.common.expression.ExpressionQuery">SELECT t.id , t.createDeptId , t.createDeptCode , t.createDeptName , t.createAreaId , t.createAreaCode , t.createAreaName , t.createUserID , t.createUserCode , t.createUserName , t.createDate , t.updateUserID , t.updateUserCode , t.updateUserName , t.updateDate , t.rowOrder , t.remark , t.state , t.srId , t.operateCode , t.operateName , t.url FROM sys_function t
+		<include refid="expressionBlock.where"/> 
+	</select>
+	<!-- 根据主键删除记录 -->
+	<delete id="del" parameterType="com.wiserun.devolop.system.entity.SysFunction">DELETE FROM sys_function WHERE id = #{id,jdbcType=NVARCHAR}</delete>
+	<!-- 根据条件删除记录 -->
+	<delete id="delByExpression" parameterType="com.wiserun.common.expression.ExpressionQuery">DELETE FROM sys_function 
+		<include refid="expressionBlock.where"/> 
+	</delete>
+
+</mapper>

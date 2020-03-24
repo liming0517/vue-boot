@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wiserun.develop.processconfig.mapper.ProcessConfigMapper" >
+
+    <resultMap id="BaseResultMap" type="com.wiserun.develop.processconfig.model.ProcessConfig" >
+    		<!-- 流程配置编号 -->
+        <result column="SPC_Code" property="SPC_Code" jdbcType="VARCHAR" />
+       		<!-- 创建时间 -->
+        <result column="SPC_CreateTime" property="SPC_CreateTime" jdbcType="VARCHAR" />
+        	<!-- 创建人 -->
+        <result column="SPC_CreateUser" property="SPC_CreateUser" jdbcType="VARCHAR" />
+     		<!-- 状态 -->
+        <result column="SPC_State" property="SPC_State" jdbcType="CHAR" />
+       		<!-- 流程模块 -->
+        <result column="SPC_Model" property="SPC_Model" jdbcType="VARCHAR" />
+        	<!-- 版本号 -->
+        <result column="SPC_Version" property="SPC_Version" jdbcType="CHAR" />
+       	    <!-- 步骤编号 -->
+        <result column="SPC_Step" property="SPC_Step" jdbcType="VARCHAR" />
+     	    <!--配置角色 -->
+        <result column="SPC_Role" property="SPC_Role" jdbcType="VARCHAR" />
+        <!-- 创建开始时间 -->
+        <result column="SPC_CreateTimeStart" property="SPC_CreateTimeStart" jdbcType="VARCHAR" />
+        <!-- 创建结束时间 -->
+        <result column="SPC_CreateTimeEnd" property="SPC_CreateTimeEnd" jdbcType="VARCHAR" />
+       <!--  模块名 -->
+        <result column="SPC_ModelName" property="SPC_ModelName" jdbcType="VARCHAR" />
+        
+    </resultMap>
+
+    <sql id="Base_Column_List" >        <!--  相当于sql语句的* -->
+        `SPC_Code`, `SPC_CreateTime`, `SPC_CreateUser`, `SPC_State`, `SPC_Model`, `SPC_Version`,`SPC_Step`,`SPC_Role`
+    </sql>
+
+	<!-- 根据条件查找所有数据并分页 -->
+    <select id="queryPageList" resultMap="BaseResultMap" parameterType="com.wiserun.develop.processconfig.model.ProcessConfig">
+    	SELECT *  FROM 
+     ( SELECT  `SPC_Code`, `SPC_CreateTime`,(SELECT user_name FROM `admin_user` WHERE user_phone=SPC_CreateUser) AS SPC_CreateUser, `SPC_State`, `SPC_Model`,(select resource_name from  admin_resource  where resource_model=SPC_Model) as SPC_ModelName, `SPC_Version`,`SPC_Step`,`SPC_Role`
+        FROM System_ProcessConfig) as a
+        <where>
+        	<if test="SPC_State != null" >
+                AND SPC_State = #{SPC_State,jdbcType=CHAR}
+            </if>
+            <if test="SPC_CreateUser != null" >
+                AND SPC_CreateUser like "%"#{SPC_CreateUser,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="SPC_Model != null" >
+                AND SPC_Model = #{SPC_Model,jdbcType=VARCHAR}
+            </if>
+            <if test="SPC_Version != null" >
+                AND SPC_Version =#{SPC_Version,jdbcType=VARCHAR}
+            </if>
+           	<if test="SPC_CreateTimeStart != null and SPC_CreateTimeStart != ''">
+			   	AND SPC_CreateTime &gt; #{SPC_CreateTimeStart}
+			</if> 
+			<if test="SPC_CreateTimeEnd != null and SPC_CreateTimeEnd != ''">
+			   	AND SPC_CreateTime &lt; #{SPC_CreateTimeEnd}
+			</if>
+        </where>
+        	ORDER BY SPC_State ASC LIMIT ${(page - 1) * size}, ${size}       
+    </select> 
+    <!-- 查找出记录总条数 -->
+     <select id="queryCount" resultType="java.lang.Integer" parameterType="com.wiserun.develop.processconfig.model.ProcessConfig">
+        SELECT COUNT(*) FROM  (SELECT *  FROM (SELECT
+        `SPC_Code`, `SPC_CreateTime`,(SELECT user_name FROM `admin_user` WHERE user_phone=SPC_CreateUser) AS SPC_CreateUser, `SPC_State`, `SPC_Model`,(select resource_name from  admin_resource  where resource_model=SPC_Model) as SPC_ModelName, `SPC_Version`,`SPC_Step`,`SPC_Role`
+        FROM System_ProcessConfig) as a
+        <where>
+        	<if test="SPC_State != null" >
+                AND SPC_State = #{SPC_State,jdbcType=CHAR}
+            </if>
+            <if test="SPC_CreateUser != null" >
+                AND SPC_CreateUser like "%"#{SPC_CreateUser,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="SPC_Model != null" >
+                AND SPC_Model = #{SPC_Model,jdbcType=VARCHAR}
+            </if>
+            <if test="SPC_Version != null" >
+                AND SPC_Version =#{SPC_Version,jdbcType=VARCHAR}
+            </if>
+           	<if test="SPC_CreateTimeStart != null and SPC_CreateTimeStart != ''">
+			   	AND SPC_CreateTime &gt; #{SPC_CreateTimeStart}
+			</if> 
+			<if test="SPC_CreateTimeEnd != null and SPC_CreateTimeEnd != ''">
+			   	AND SPC_CreateTime &lt; #{SPC_CreateTimeEnd}
+			</if>
+        </where>
+        	ORDER BY SPC_State ASC) as b
+    </select> 
+    <!-- 根据SPC_Code查找出一条详细信息 -->
+    <select id="queryOne1" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM System_ProcessConfig
+        WHERE SPC_Code = #{SPC_Code,jdbcType=VARCHAR}
+    </select>
+    <!-- 根据条件查找出一条详细信息 -->
+    <select id="queryOne2" resultMap="BaseResultMap" parameterType="com.wiserun.develop.processconfig.model.ProcessConfig" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM System_ProcessConfig
+        WHERE SPC_Version = #{SPC_Version,jdbcType=VARCHAR} AND SPC_Step=#{SPC_Step,jdbcType=VARCHAR}
+    </select>
+    <!-- 更新方法 -->
+    <update id="update" parameterType="com.wiserun.develop.processconfig.model.ProcessConfig" >
+        update System_ProcessConfig
+        <set>
+            <if test="SPC_CreateTime != null" >
+                SPC_CreateTime = #{SPC_CreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_CreateUser != null" >
+                SPC_CreateUser = #{SPC_CreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_State != null" >
+                SPC_State = #{SPC_State,jdbcType=CHAR},
+            </if>
+            <if test="SPC_Model != null" >
+                SPC_Model = #{SPC_Model,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_Version != null" >
+                SPC_Version = #{SPC_Version,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_Step != null" >
+                SPC_Step = #{SPC_Step,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_Role != null" >
+                SPC_Role = #{SPC_Role,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where SPC_Code = #{SPC_Code,jdbcType=VARCHAR}
+    </update>
+    
+    <insert id="add" parameterType="com.wiserun.develop.processconfig.model.ProcessConfig" >
+        INSERT INTO System_ProcessConfig
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="SPC_Code != null" >
+                `SPC_Code`,
+            </if>
+            <if test="SPC_CreateTime != null" >
+                `SPC_CreateTime`,
+            </if>
+            <if test="SPC_CreateUser != null" >
+                `SPC_CreateUser`,
+            </if>
+            <if test="SPC_State != null" >
+                `SPC_State`,
+            </if>
+            <if test="SPC_Model != null" >
+                `SPC_Model`,
+            </if>
+            <if test="SPC_Version != null" >
+                `SPC_Version`,
+            </if>
+            <if test="SPC_Step != null" >
+                `SPC_Step`,
+            </if>
+            <if test="SPC_Role != null" >
+                `SPC_Role`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="SPC_Code != null" >
+                #{SPC_Code,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_CreateTime != null" >
+                #{SPC_CreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_CreateUser != null" >
+                #{SPC_CreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_State != null" >
+                #{SPC_State,jdbcType=CHAR},
+            </if>
+            <if test="SPC_Model != null" >
+                #{SPC_Model,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_Version != null" >
+                #{SPC_Version,jdbcType=CHAR},
+            </if>
+            <if test="SPC_Step != null" >
+                #{SPC_Step,jdbcType=VARCHAR},
+            </if>
+            <if test="SPC_Role != null" >
+                #{SPC_Role,jdbcType=CHAR},
+            </if>            
+        </trim>
+    </insert>
+    
+    <delete id="delete1" parameterType="java.lang.String" >
+        DELETE FROM System_ProcessConfig
+        WHERE SPC_Code = #{SPC_Code,jdbcType=VARCHAR}
+    </delete>
+</mapper>

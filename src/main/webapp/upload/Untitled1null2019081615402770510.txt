@@ -1,0 +1,88 @@
+1239583907
+6035
+56175617
+WS.web@5617-zzs
+
+document.getElementByclassName("editCode").disabled = true;
+document.getElementById("editCode").disabled = true;
+alert(JSON.stringify(xxxxxxxxxxxx));
+
+class=" collapsing"
+set_menu_height();
+ $('#demo').on("shown.bs.collapse", function() {
+	set_menu_height1();
+	$('#datalist').datagrid("reload");
+	});	 
+
+  $('#demo').on("hidden.bs.collapse", function() {
+		set_menu_height1();
+		$('#datalist').datagrid("reload");
+		});
+
+新增，上传，领用，借用，打印：btn-success   绿
+编辑，入库确认，入账核对，区审批结果：btn-warning   黄
+查看，导入导出，归还，高级：btn-info   淡蓝
+删除，作废，保存，返回，处理，批准，维修，取消：btn-danger    红
+审核，撤销，提交，下一步：btn-primary	 深蓝
+
+
+同级iframe互相控制页面的跳转 window.parent.document.getElementById("").src
+
+确认所有列表加载情况：
+资产:√
+设备:√
+后勤:√
+更新所有tabs的特效√
+
+
+资产管理 借用登记 借用 tabs需要点击才能显示
+设备管理 预算管理 预算申请 编辑页面缺少一张视图  V_预算管理_预算申请明细
+设备管理 采购申请 需求表 编辑 缺少一个视图   V_部门负责人
+设备管理 预算管理 正式预算 列表缺少视图      V_预算管理_正式预算
+设备管理 工作日志 导出列表 报错
+
+
+select * from sysUserinfo --人员信息表
+select * from sysDepartment --部门表
+select * from sysAuthority --角色表
+select * from sysUserDept --人员部门关系
+select * from sysUserAuth --人员角色关系
+select * from sysAuthModule --菜单角色关系
+select * from sysAuModule --菜单表
+select * from RankAuthPart --权限标签人员关系
+select * from BasRank  --权限标签
+
+项目名：虚拟现实法治实训系统
+英文名：VLM
+
+
+
+描述：实际上就是一个简单版的考试系统，包含出题目，建考试，参加考试
+
+
+
+模块名：虚拟设置
+             虚拟信息设置          实际上就是题库管理，用来出题目，相应模块其它系统已实现，搬过来修改用(题目和选项要支持图片)
+             虚拟场景设置          实际上就是考试管理，用来组织一场考试，需要有类别下拉框（模拟法庭、模拟立法、模拟仲裁、模拟事务调解），也是拿人家过来修改用
+        虚拟实训
+             模拟法庭              显示有关“模拟法庭”类别的所有考试，然后点击进入考试，做题（拿人家过来修改用），保存提交，而后点击查看可看自己做的结果
+             模拟立法              显示有关“模拟立法”类别的所有考试，然后点击进入考试，做题（拿人家过来修改用），保存提交，而后点击查看可看自己做的结果
+             模拟仲裁              显示有关“模拟仲裁”类别的所有考试，然后点击进入考试，做题（拿人家过来修改用），保存提交，而后点击查看可看自己做的结果
+             模拟事务调解          显示有关“模拟事务调解”类别的所有考试，然后点击进入考试，做题（拿人家过来修改用），保存提交，而后点击查看可看自己做的结果
+
+
+PS：因为项目是虚拟现实法治实训系统所以我们某些元素要包装的像那么一回事，尽量不出现有关考试文字元素
+
+
+
+
+参考：王振华做的WSRLM项目中的题库管理与考试管理部分,访问地址：http://192.168.111.111:8080/WSRLM/login.jsp  post 62129977（JSP SVL BEAN SQLSERVER都可抄袭，但是需要改动，最主要的就是题库管理题目和答案需要兼容图片）
+      王振华做的TCOIC项目中的题库管理、学生答题（访问地址：http://192.168.168.210:8080/TCOIC/    post   rdc2006）
+      以上两个项目其实都一样
+      当然也可以参考TCOIC中，在线考试这个栏目，这个栏目里的题库设置和考试设置都是旧的，但支持图片，你也可以用这个翻新，（不过代码较陈旧不建议）
+
+
+
+培训方案                                       华东政法大学附属中学
+概要设计（包括数据库设计）                       虚拟现实法治实训系统
+实施方案及计划                

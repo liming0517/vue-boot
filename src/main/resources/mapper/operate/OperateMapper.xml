@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wiserun.develop.operate.mapper.OperateMapper" >
+
+    <resultMap id="BaseResultMap" type="com.wiserun.develop.operate.model.Operate" >
+    		<!-- id -->
+        <result column="operate_id" property="operate_id" jdbcType="VARCHAR" />
+       		<!-- 创建时间 -->
+        <result column="operate_CreateTime" property="operate_CreateTime" jdbcType="VARCHAR" />
+        	<!-- 创建人 -->
+        <result column="operate_CreateUser" property="operate_CreateUser" jdbcType="VARCHAR" />
+     		<!-- 状态 -->
+        <result column="operate_State" property="operate_State" jdbcType="CHAR" />
+       		<!-- 模块编号 -->
+        <result column="operate_Model" property="operate_Model" jdbcType="VARCHAR" />
+        	<!-- 模块操作 -->
+        <result column="operate_operate" property="operate_operate" jdbcType="VARCHAR" />
+        <!-- 创建开始时间 -->
+        <result column="operate_CreateTimeStart" property="operate_CreateTimeStart" jdbcType="VARCHAR" />
+        <!-- 创建结束时间 -->
+        <result column="operate_CreateTimeEnd" property="operate_CreateTimeEnd" jdbcType="VARCHAR" />   
+        <!-- 显示用名 -->
+        <result column="operate_Name" property="operate_Name" jdbcType="VARCHAR" />   
+             
+    </resultMap>
+
+	<!-- 根据条件查找数据 -->
+     <select id="queryPageList" resultMap="BaseResultMap" parameterType="com.wiserun.develop.operate.model.Operate">
+    			SELECT *  FROM 
+				(select `operate_id`, `operate_CreateTime`,(SELECT user_name FROM `admin_user` WHERE user_phone=operate_CreateUser) AS operate_CreateUser, (select resource_name from  admin_resource  where resource_model=operate_Model)  as operate_Name,`operate_State`, `operate_Model`, `operate_operate`
+				from   admin_operate ) as a 
+		    	 <where>              
+		        	<if test="operate_Model != null" >
+		                AND operate_Model = #{operate_Model,jdbcType=VARCHAR}
+		            </if>
+		            <if test="operate_CreateUser != null" >
+		                AND operate_CreateUser like "%"#{operate_CreateUser,jdbcType=VARCHAR}"%"
+		            </if>
+		            <if test="operate_State != null" >
+		                AND operate_State = #{operate_State,jdbcType=VARCHAR}
+		            </if>
+		            <if test="operate_operate != null" >
+		                AND operate_operate like "%"#{operate_operate,jdbcType=VARCHAR}"%"
+		            </if>
+		            <if test="operate_CreateTimeStart != null and operate_CreateTimeStart != ''">
+					   	AND operate_CreateTime &gt; #{operate_CreateTimeStart}
+					</if> 
+					<if test="operate_CreateTimeEnd != null and operate_CreateTimeEnd != ''">
+					   	AND operate_CreateTime &lt; #{operate_CreateTimeEnd}
+					</if>
+		        </where> 
+		       		 ORDER BY operate_State DESC  LIMIT ${(page - 1) * size}, ${size}
+    </select> 
+       <!-- 根据条件查找出记录总条数 -->
+    
+      <select id="queryCount" resultType="java.lang.Integer" parameterType="com.wiserun.develop.operate.model.Operate">
+		    	 SELECT COUNT(*) FROM (SELECT *  FROM 		    	
+				(select `operate_id`, `operate_CreateTime`,(SELECT user_name FROM `admin_user` WHERE user_phone=operate_CreateUser) AS operate_CreateUser,(select resource_name from  admin_resource  where resource_model=operate_Model)  as operate_Name, `operate_State`, `operate_Model`, `operate_operate`
+				from   admin_operate ) as a
+		    	 <where>              
+		        	<if test="operate_Model != null" >
+		                AND operate_Model = #{operate_Model,jdbcType=VARCHAR}
+		            </if>
+		            <if test="operate_CreateUser != null" >
+		                AND operate_CreateUser like "%"#{operate_CreateUser,jdbcType=VARCHAR}"%"
+		            </if>
+		            <if test="operate_State != null" >
+		                AND operate_State = #{operate_State,jdbcType=VARCHAR}
+		            </if>
+		            <if test="operate_operate != null" >
+		                AND operate_operate like "%"#{operate_operate,jdbcType=VARCHAR}"%"
+		            </if>
+		            <if test="operate_CreateTimeStart != null and operate_CreateTimeStart != ''">
+					   	AND operate_CreateTime &gt; #{operate_CreateTimeStart}
+					</if> 
+					<if test="operate_CreateTimeEnd != null and operate_CreateTimeEnd != ''">
+					   	AND operate_CreateTime &lt; #{operate_CreateTimeEnd}
+					</if>
+		        </where> 
+		       		 ORDER BY operate_State DESC) as b
+    </select>  
+    <!-- 根据operate_Modele查找出列表 -->
+    <select id="queryListByModel" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT *  FROM  admin_operate
+        WHERE operate_Model = #{operate_Model,jdbcType=VARCHAR}
+    </select> 
+    <!-- 根据id查找出单条信息 -->
+    <select id="queryOneByid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT *  FROM  admin_operate
+        WHERE operate_id = #{operate_id,jdbcType=VARCHAR}
+    </select> 
+    <!-- 更新方法 -->
+     <update id="update" parameterType="com.wiserun.develop.operate.model.Operate" >
+        update admin_operate
+        <set>
+            <if test="operate_Model != null" >
+                operate_Model = #{operate_Model,jdbcType=VARCHAR},
+            </if>
+            <if test="operate_CreateUser != null" >
+                operate_CreateUser = #{operate_CreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="operate_State != null" >
+                operate_State = #{operate_State,jdbcType=CHAR},
+            </if>
+            <if test="operate_operate != null" >
+                operate_operate = #{operate_operate,jdbcType=VARCHAR},
+            </if>
+            <if test="operate_CreateTime != null" >
+                operate_CreateTime = #{operate_CreateTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where operate_id = #{operate_id,jdbcType=VARCHAR}
+    </update> 
+    
+     <insert id="add" parameterType="com.wiserun.develop.operate.model.Operate" >
+        INSERT INTO admin_operate
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="operate_id != null" >
+                `operate_id`,
+            </if>
+            <if test="operate_CreateTime != null" >
+                `operate_CreateTime`,
+            </if>
+            <if test="operate_CreateUser != null" >
+                `operate_CreateUser`,
+            </if>
+            <if test="operate_State != null" >
+                `operate_State`,
+            </if>
+            <if test="operate_Model != null" >
+                `operate_Model`,
+            </if>
+            <if test="operate_operate != null" >
+                `operate_operate`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="operate_id != null" >
+                #{operate_id,jdbcType=VARCHAR},
+            </if>
+            <if test="operate_CreateTime != null" >
+                #{operate_CreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="operate_CreateUser != null" >
+                #{operate_CreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="operate_State != null" >
+                #{operate_State,jdbcType=CHAR},
+            </if>
+            <if test="operate_Model != null" >
+                #{operate_Model,jdbcType=VARCHAR},
+            </if>
+            <if test="operate_operate != null" >
+                #{operate_operate,jdbcType=CHAR},
+            </if>          
+        </trim>
+    </insert> 
+    
+     <delete id="delete1" parameterType="java.lang.String" >
+        DELETE FROM admin_operate
+        WHERE operate_id = #{operate_id,jdbcType=VARCHAR}
+    </delete>
+    
+</mapper>

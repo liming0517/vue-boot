@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--此处的文件路径可能会有所出入，请根据实际情况修改 -->
+<!-- 创建人：代码生成器 Create date: **请补充** 功能说明：sys.res 相关操作 修订信息(**请补充**) 修订日期:**请补充** 
+	原因:**请补充** 修订人:**请补充** -->
+<mapper namespace="com.wiserun.devolop.system.dao.SysResDao">
+	
+	
+	<!-- 获取用户菜单SQL r_sys_function:系统功能表,系统功能=资源+操作 r_role_permission:角色权限表,存放[角色-系统功能]对应关系 
+		r_user_role:用户角色表,存放用户具有哪些角色 r_sys_res:系统资源,即菜单表 1. 子查询根据[角色权限表]和[用户角色表]过滤出用户的系统功能(主键sf_id) 
+		2. 关联系统功能表,返回sr_id 3. 关联r_sys_res表,返回用户菜单 -->
+	<select id="findUserMenu" resultMap="queryResultMap"
+		parameterType="String">
+		<!-- SELECT sr.id , sr.parentId , sr.resName , sr.tabId , t2.tabName , 
+			sr.url FROM sys_res sr INNER JOIN ( SELECT t.id FROM sys_res t INNER JOIN 
+			( SELECT DISTINCT sf.srId FROM sys_function sf INNER JOIN ( SELECT DISTINCT 
+			rp.sfId FROM sys_role_permission rp INNER JOIN sys_user_role ur ON rp.roleId 
+			= ur.roleId WHERE ur.userId = #{userId} ) sf2 ON sf.sf_id = sf2.sfId ) tt 
+			ON t.id = tt.srId UNION SELECT t.parentId FROM sys_res t INNER JOIN ( SELECT 
+			DISTINCT sf.id FROM sys_function sf INNER JOIN ( SELECT DISTINCT rp.sfId 
+			FROM sys_role_permission rp INNER JOIN sys_user_role ur ON rp.roleId = ur.roleId 
+			WHERE ur.userId = #{userId} ) sf2 ON sf.id` = sf2.sf_id ) tt ON t.`sr_id` 
+			= tt.srId ) t1 ON sr.id = t1.srId INNER JOIN sys_res_tab t2 ON sr.tabId = 
+			t2.id ORDER BY sr.srId ASC -->
+		SELECT sr.id , sr.parentId , sr.resName , sr.tabId , t2.tabName ,
+		sr.url
+		FROM sys_res sr INNER JOIN (
+		SELECT t.id FROM sys_res t INNER JOIN
+		( SELECT DISTINCT sf.srId FROM sys_function sf INNER JOIN
+		( SELECT DISTINCT rp.sfId FROM sys_role_permission rp INNER JOIN
+		sys_user_role ur ON rp.roleId = ur.roleId
+		WHERE ur.userId = #{userId} ) sf2 ON sf.id = sf2.sfId ) tt ON t.id =
+		tt.srId UNION SELECT t.parentId FROM sys_res t
+		INNER JOIN
+		( SELECT DISTINCT sf.srId FROM sys_function sf INNER JOIN
+		( SELECT DISTINCT rp.sfId FROM sys_role_permission rp
+		INNER JOIN sys_user_role ur ON rp.roleId = ur.roleId WHERE ur.userId =
+		#{userId} )
+		sf2 ON sf.id = sf2.sfId ) tt ON t.id = tt.srId ) t1 ON sr.id = t1.id
+		INNER JOIN sys_res_tab t2 ON sr.tabId = t2.id ORDER BY sr.id ASC
+
+	</select>
+</mapper>

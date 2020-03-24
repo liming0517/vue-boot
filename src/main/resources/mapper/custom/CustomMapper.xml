@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.temp.custom.mapper.CustomMapper" >
+
+    <resultMap id="BaseResultMap" type="com.temp.custom.model.Custom" >
+    	<!--  主键 -->
+        <result column="C_ID" property="C_ID" jdbcType="VARCHAR" />
+        <!--  姓名 -->
+        <result column="C_Name" property="C_Name" jdbcType="VARCHAR" />
+        <!--  状态 -->
+        <result column="C_State" property="C_State" jdbcType="VARCHAR" />
+    </resultMap>
+	<!-- 根据条件查找所有数据并分页 -->
+     <select id="getList" resultMap="BaseResultMap" parameterType="com.temp.custom.model.Custom">
+		    	select C_ID,C_Name,C_State from custom
+		    	 <where>              
+		        	<if test="C_ID != null" >
+		                AND C_ID like "%"#{C_ID,jdbcType=VARCHAR}"%"
+		            </if>
+		            <if test="C_Name != null" >
+		                AND C_Name "%"#{C_Name,jdbcType=VARCHAR}"%"
+		            </if>
+		            <if test="C_State != null">
+					   	 AND C_State "%"#{C_State,jdbcType=VARCHAR}"%"
+					</if> 
+		        </where> 
+    </select> 
+    
+</mapper>

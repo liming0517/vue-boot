@@ -1,0 +1,11 @@
+<Resource auth="Container" 
+	driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver" 
+	maxActive="100" 
+	maxIdle="30" 
+	maxWait="5000" 
+	name="jdbc/XZGLITSM" 
+	password="wiserun_123" 
+	type="javax.sql.DataSource" 
+	url="jdbc:sqlserver://192.168.168.229:1433;DatabaseName=XZGLITSM" 
+	username="sa"/>
+		

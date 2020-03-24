@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wiserun.develop.message.mapper.MessageMapper" >
+
+    <resultMap id="BaseResultMap" type="com.wiserun.develop.message.model.Message" >
+   		<!-- 通知编号 -->
+        <result column="SM_Code" property="SM_Code" jdbcType="VARCHAR" />
+        <!-- 创建时间 -->
+        <result column="SM_CreateTime" property="SM_CreateTime" jdbcType="VARCHAR" />
+        <!-- 创建人 -->
+        <result column="SM_CreateUser" property="SM_CreateUser" jdbcType="VARCHAR" />
+        <!--  状态 -->
+        <result column="SM_State" property="SM_State" jdbcType="CHAR" />
+        <!-- 通知内容 -->
+        <result column="SM_Content" property="SM_Content" jdbcType="VARCHAR" />
+        <!-- 关联业务主键 -->
+        <result column="SM_BussinessCode" property="SM_BussinessCode" jdbcType="VARCHAR" />
+        <!--  关联模块 -->
+        <result column="SM_Model" property="SM_Model" jdbcType="VARCHAR" />
+  		<!-- 关联模块的操作 -->
+        <result column="SM_Operate" property="SM_Operate" jdbcType="VARCHAR" />
+        <!-- 详情地址 -->
+        <result column="SM_URL" property="SM_URL" jdbcType="VARCHAR" />
+        <!-- 被通知人 -->
+        <result column="SM_Notified" property="SM_Notified" jdbcType="VARCHAR" />
+        <!-- 已阅人 -->
+        <result column="SM_Readed" property="SM_Readed" jdbcType="VARCHAR" />
+        <!-- 创建开始时间 -->
+        <result column="SM_CreateTimeStart" property="SM_CreateTimeStart" jdbcType="VARCHAR" />
+        <!-- 创建结束时间 -->
+        <result column="SM_CreateTimeEnd" property="SM_CreateTimeEnd" jdbcType="VARCHAR" />
+        <!-- 已读或未读 -->
+        <result column="SM_YoN" property="SM_YoN" jdbcType="VARCHAR" />
+        <!-- 登录人 -->
+        <result column="LoginUser" property="LoginUser" jdbcType="VARCHAR" />
+        <!-- 创建人名 -->
+        <result column="SM_CreateUserName" property="SM_CreateUserName" jdbcType="VARCHAR" />
+        <!-- 微信提醒人 -->
+        <result column="SM_WXNotified" property="SM_WXNotified" jdbcType="VARCHAR" />
+        <!-- 短信提醒人 -->
+        <result column="SM_DXNotified" property="SM_DXNotified" jdbcType="VARCHAR" />
+        <!-- 邮件提醒人 -->
+        <result column="SM_YJNotified" property="SM_YJNotified" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >        <!--  相当于sql语句的* -->
+        `SM_Code`, `SM_CreateTime`, `SM_CreateUser`, `SM_State`, `SM_Content`, `SM_BussinessCode`,`SM_Model`,`SM_Operate`,`SM_URL`,`SM_Notified`,`SM_Readed`
+    </sql>
+
+	<!-- 根据条件查找所有数据并分页 -->
+     <select id="queryPageList" resultMap="BaseResultMap" parameterType="com.wiserun.develop.message.model.Message">
+		    	select * from (SELECT *,(SELECT user_name FROM `admin_user` WHERE user_phone=SM_CreateUser) AS SM_CreateUserName,CASE WHEN (FIND_IN_SET(#{LoginUser,jdbcType=VARCHAR},SM_Readed)) IS NULL THEN 'N' WHEN (FIND_IN_SET(#{LoginUser,jdbcType=VARCHAR},SM_Readed))=0
+				THEN 'N' ELSE 'Y' END AS SM_YoN FROM `system_message`) as a
+		    	 <where>              
+		        	<if test="SM_Content != null" >
+		                AND SM_Content like "%"#{SM_Content,jdbcType=VARCHAR}"%"
+		            </if>
+		            <if test="SM_YoN != null" >
+		                AND SM_YoN = #{SM_YoN 	,jdbcType=VARCHAR}
+		            </if>
+		            <if test="SM_CreateTimeStart != null and SM_CreateTimeStart != ''">
+					   	AND SM_CreateTime &gt; #{SM_CreateTimeStart}
+					</if> 
+					<if test="SM_CreateTimeEnd != null and SM_CreateTimeEnd != ''">
+					   	AND SM_CreateTime &lt; #{SM_CreateTimeEnd}
+					</if>
+					<if test="LoginUser != null">
+					   	AND SM_Notified like "%"#{LoginUser,jdbcType=VARCHAR}"%"
+					</if>
+		        </where> 
+		       		 ORDER BY SM_CreateTime DESC LIMIT ${(page - 1) * size}, ${size}
+    </select> 
+
+    <!-- 根据条件查找出记录总条数 -->
+    
+     <select id="queryCount" resultType="java.lang.Integer" parameterType="com.wiserun.develop.message.model.Message">
+		    	 SELECT COUNT(*) FROM  (select * from (SELECT *,(SELECT user_name FROM `admin_user` WHERE user_phone=SM_CreateUser) AS SM_CreateUserName,CASE WHEN (FIND_IN_SET(#{LoginUser,jdbcType=VARCHAR},SM_Readed)) IS NULL THEN 'N' WHEN (FIND_IN_SET(#{LoginUser,jdbcType=VARCHAR},SM_Readed))=0
+				THEN 'N' ELSE 'Y' END AS SM_YoN FROM `system_message`) as a
+		    	 <where>              
+		        	<if test="SM_Content != null" >
+		                AND SM_Content like "%"#{SM_Content,jdbcType=VARCHAR}"%"
+		            </if>
+		            <if test="SM_YoN != null" >
+		                AND SM_YoN = #{SM_YoN 	,jdbcType=VARCHAR}
+		            </if>
+		            <if test="SM_CreateTimeStart != null and SM_CreateTimeStart != ''">
+					   	AND SM_CreateTime &gt; #{SM_CreateTimeStart}
+					</if> 
+					<if test="SM_CreateTimeEnd != null and SM_CreateTimeEnd != ''">
+					   	AND SM_CreateTime &lt; #{SM_CreateTimeEnd}
+					</if>
+					<if test="LoginUser != null">
+					   	AND SM_Notified like "%"#{LoginUser,jdbcType=VARCHAR}"%"
+					</if>
+		        </where> 
+		       		 ORDER BY SM_CreateTime) as b
+    </select> 
+     <!-- 根据编号查找出一条详细信息 -->
+     <select id="queryOne1" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM System_Message
+        WHERE SM_Code = #{SM_Code,jdbcType=VARCHAR}
+    </select>  
+    <!-- 查找出需要更新的微信提醒人数据 -->
+     <select id="queryWXCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT
+        SM_Code
+        FROM System_Message
+        WHERE IFNULL(SM_WXNotified,'')!=CONCAT(SM_Notified,'/',IFNULL(SM_Readed,''))
+    </select> 
+     <!-- 查找出需要更新的短信提醒人数据 -->
+     <select id="queryDXCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT
+        SM_Code
+        FROM System_Message
+        WHERE IFNULL(SM_DXNotified,'')!=CONCAT(SM_Notified,'/',IFNULL(SM_Readed,''))
+    </select> 
+     <!-- 查找出需要更新的邮件提醒人数据 -->
+     <select id="queryYJCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT
+        SM_Code
+        FROM System_Message
+        WHERE IFNULL(SM_YJNotified,'')!=CONCAT(SM_Notified,'/',IFNULL(SM_Readed,''))
+    </select> 
+    <!-- 添加操作 -->
+     <insert id="add" parameterType="com.wiserun.develop.message.model.Message" >
+        INSERT INTO System_Message					
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="SM_Code != null" >
+                `SM_Code`,
+            </if>
+            <if test="SM_CreateTime != null" >
+                `SM_CreateTime`,
+            </if>
+            <if test="SM_CreateUser != null" >
+                `SM_CreateUser`,
+            </if>
+            <if test="SM_State != null" >
+                `SM_State`,
+            </if>
+            <if test="SM_Content != null" >
+                `SM_Content`,
+            </if>
+            <if test="SM_BussinessCode != null" >
+                `SM_BussinessCode`,
+            </if>
+            <if test="SM_Model != null" >
+                `SM_Model`,
+            </if>
+            <if test="SM_Operate != null" >
+                `SM_Operate`,
+            </if>
+            <if test="SM_URL != null" >
+                `SM_URL`,
+            </if>
+            <if test="SM_Notified != null" >
+                `SM_Notified`,
+            </if>
+            <if test="SM_Readed != null" >
+                `SM_Readed`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="SM_Code != null" >
+                #{SM_Code,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_CreateTime != null" >
+                #{SM_CreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_CreateUser != null" >
+                #{SM_CreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_State != null" >
+                #{SM_State,jdbcType=CHAR},
+            </if>
+            <if test="SM_Content != null" >
+                #{SM_Content,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_BussinessCode != null" >
+                #{SM_BussinessCode,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_Model != null" >
+                #{SM_Model,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_Operate != null" >
+                #{SM_Operate,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_URL != null" >
+                #{SM_URL,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_Notified != null" >
+                #{SM_Notified,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_Readed != null" >
+                #{SM_Readed,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert> 
+    
+    
+    <!-- 更新方法 -->
+     <update id="update" parameterType="com.wiserun.develop.message.model.Message" >
+        update System_Message
+        <set>
+            <if test="SM_CreateTime != null" >
+                SM_CreateTime = #{SM_CreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_CreateUser != null" >
+                SM_CreateUser = #{SM_CreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_State != null" >
+                SM_State = #{SM_State,jdbcType=CHAR},
+            </if>
+            <if test="SM_Content != null" >
+                SM_Content = #{SM_Content,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_BussinessCode != null" >
+                SM_BussinessCode = #{SM_BussinessCode,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_Model != null" >
+                SM_Model = #{SM_Model,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_Operate != null" >
+                SM_Operate = #{SM_Operate,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_URL != null" >
+                SM_URL = #{SM_URL,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_Notified != null" >
+                SM_Notified = #{SM_Notified,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_Readed != null||SM_Readed != ''" >
+                SM_Readed = #{SM_Readed,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_WXNotified != null" >
+                SM_WXNotified = #{SM_WXNotified,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_DXNotified != null" >
+                SM_DXNotified = #{SM_DXNotified,jdbcType=VARCHAR},
+            </if>
+            <if test="SM_YJNotified != null||SM_Readed != ''" >
+                SM_YJNotified = #{SM_YJNotified,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where SM_Code = #{SM_Code,jdbcType=VARCHAR}
+    </update> 
+     <update id="updateWX" parameterType="java.lang.String" >
+        update System_Message
+        <set>
+            <if test="_parameter != null" >
+                SM_WXNotified = CONCAT(SM_Notified,'/',IFNULL(SM_Readed,'')) 
+            </if>
+        </set>
+        where SM_Code = #{SM_Code,jdbcType=VARCHAR}
+    </update> 
+    <update id="updateDX" parameterType="java.lang.String" >
+        update System_Message
+        <set>
+            <if test="_parameter != null" >
+                SM_DXNotified = CONCAT(SM_Notified,'/',IFNULL(SM_Readed,'')) 
+            </if>
+        </set>
+        where SM_Code = #{SM_Code,jdbcType=VARCHAR}
+    </update> 
+    <update id="updateYJ" parameterType="java.lang.String" >
+        update System_Message
+        <set>
+            <if test="_parameter != null" >
+                SM_YJNotified = CONCAT(SM_Notified,'/',IFNULL(SM_Readed,'')) 
+            </if>
+        </set>
+        where SM_Code = #{SM_Code,jdbcType=VARCHAR}
+    </update> 
+</mapper>

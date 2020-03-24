@@ -1,0 +1,93 @@
+<div
+		style="overflow: hidden; height: 56px; background: #f0f0f0; width:100%"
+		title="验收" region="north">
+		<table class="tablestyle" style="width:100%">
+			<tr >
+			
+				<td width="100%">
+					<span id="showButton1" style="display: block;">
+					<a id="xq"
+					onclick="doToolbar(this.id)" href="#" class="easyui-linkbutton"
+					plain="true" iconCls="icon-audit">详情</a>
+					<a id="gnys"
+					onclick="doToolbar(this.id)" href="#" class="easyui-linkbutton"
+					plain="true" iconCls="icon-ok">功能验收</a> 
+					<a id="slys"
+					onclick="doToolbar(this.id)" href="#" class="easyui-linkbutton"
+					plain="true" iconCls="icon-ok">数量验收</a>
+					<a id="printTXM" onclick="doToolbar(this.id)"
+					href="#" class="easyui-linkbutton" plain="true"
+					iconCls="icon-print">条形码打印</a> 
+					<a id="print" onclick="doToolbar(this.id)" 
+					href="#" class="easyui-linkbutton"
+					plain="true" iconCls="icon-print">打印</a>
+					</span>
+					<span id="showButton2" style="display: none;">
+					<a id="print" onclick="doToolbar(this.id)" 
+					href="#" class="easyui-linkbutton"
+					plain="true" iconCls="icon-print">打印</a> 
+					</span>
+				</td>
+			</tr>
+			
+		</table>
+	</div>
+	<div region="center"
+		style="background:#f0f0f0;width:100%;WORD-WRAP: break-word;TABLE-LAYOUT: fixed;word-break:break-all;">
+		<div  title="验收确认单" style="height:50%">
+			<table id="icSBQDLIST" name="icSBQDLIST" width="100%"></table>
+		</div>
+		<div  title="采购清单" style="height:50%">
+			<form method="post" id="fm" style="margin: 0px;height: 100%">
+				<table id="icCGQDLIST" name="icCGQDLIST" width="100%"></table>
+			</form>
+		</div>
+	</div>
+	<div id='info'>
+		引入编辑页面用Ifram
+		<iframe id="infoiframe" name="infoiframe" src='' style='width:100%; height:100%;' frameborder="0" scrolling="no"></iframe>
+	</div>
+	数量验收框
+	<div id='slysk'>
+		<form id="form1" name="form1" style="margin: 0px;padding: 0px;">
+		<a id="slqr" onclick="doToolbar(this.id)" href="javascript:void(0)" class="easyui-linkbutton"
+			plain="true" iconCls="icon-ok" disabled="disabled">确认验收</a>
+			<table class="tablestyle" width="100%">
+				<tr>
+					<td>验收结果</td>
+					<td>
+					<input type="radio" id="icSTATE" name="icSTATE" value="5"/><span>通过</span>
+					<input type="radio" id="icSTATE" name="icSTATE" value="6"/><span>不通过</span>
+					</td>
+				</tr>
+				<input id="active" name="active" value="slqr" type="hidden"/>
+				<input id="icYSID" name="icYSID"  type="hidden"/>
+			</table>
+		</form>
+	</div>
+	功能验收框
+	<div id='gnysk'>
+		<form id="form2" name="form1" style="margin: 0px;padding: 0px;">
+		<a id="gnqr" onclick="doToolbar(this.id)" href="javascript:void(0)" class="easyui-linkbutton"
+			plain="true" iconCls="icon-ok" disabled="disabled">确认验收</a>
+			<table class="tablestyle" width="100%">
+				<tr>
+					<td>参与人员</td>
+					<td><input id="icCYRY" name="icCYRY" class="easyui-validatebox"  maxLength="50" /><font color="red">*</font></td>
+				</tr>
+				<tr>
+					<td>验收结果</td>
+					<td>
+					<input type="radio" id="icSTATE1" name="icSTATE1" value="3"/><span>通过</span>
+					<input type="radio" id="icSTATE1" name="icSTATE1" value="4"/><span>不通过</span>
+					</td>
+				</tr>
+				<input id="active" name="active" value="gnqr" type="hidden"/>
+				<input id="icYSID1" name="icYSID1"  type="hidden"/>
+			</table>
+		</form>
+	</div>
+	变更记录框
+	<div id='bgjlk'>
+		<table id="icBGJL" name="icBGJL" width="100%"></table>
+	</div>

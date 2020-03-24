@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wiserun.develop.filetemplate.mapper.FileTemplateMapper" >
+
+    <resultMap id="BaseResultMap" type="com.wiserun.develop.filetemplate.model.FileTemplate" >
+   		<!-- 模板编号 -->
+        <result column="SFT_Code" property="SFT_Code" jdbcType="VARCHAR" />
+        <!-- 创建时间 -->
+        <result column="SFT_CreateTime" property="SFT_CreateTime" jdbcType="VARCHAR" />
+        <!-- 创建人 -->
+        <result column="SFT_CreateUser" property="SFT_CreateUser" jdbcType="VARCHAR" />
+        <!--  状态 -->
+        <result column="SFT_State" property="SFT_State" jdbcType="CHAR" />
+        <!-- 模板类型 -->
+        <result column="SFT_TemplateType" property="SFT_TemplateType" jdbcType="VARCHAR" />
+        <!-- 模块编号 -->
+        <result column="SFT_ModelCode" property="SFT_ModelCode" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >        <!--  相当于sql语句的* -->
+        `SFT_Code`, `SFT_CreateTime`, `SFT_CreateUser`, `SFT_State`, `SFT_TemplateType`, `SFT_ModelCode`
+    </sql>
+
+	<!-- 根据条件查找所有数据并分页 -->
+      <select id="queryPageList" resultMap="BaseResultMap" parameterType="com.wiserun.develop.filetemplate.model.FileTemplate">
+		    	SELECT
+		        <include refid="Base_Column_List" />
+		        FROM  System_FileTemplate
+		    	 <where>     
+					<if test="SFT_TemplateType != null" >
+		                AND SFT_TemplateType like "%"#{SFT_TemplateType,jdbcType=VARCHAR}"%"
+		            </if>
+					<if test="SFT_State != null" >
+		                AND SFT_State =#{SFT_State,jdbcType=CHAR}
+		            </if>		            
+		            <if test="SFT_ModelCode != null" >
+		                AND SFT_ModelCode =#{SFT_ModelCode,jdbcType=VARCHAR}
+		            </if>		    	          
+		        </where> 
+		       		 ORDER BY SFT_State ASC LIMIT ${(page - 1) * size}, ${size}
+
+    </select>  
+   <!--  下拉框专用不分页列表 -->
+    <select id="queryList1" resultMap="BaseResultMap" parameterType="com.wiserun.develop.filetemplate.model.FileTemplate">
+		    	SELECT
+		        <include refid="Base_Column_List" />
+		        FROM  System_FileTemplate
+		    	 <where>     
+					<if test="SFT_State != null" >
+		                AND SFT_State =#{SFT_State,jdbcType=CHAR}
+		            </if>		            		    	          
+		        </where> 
+		       		 ORDER BY SFT_State ASC 
+
+    </select>  
+
+    <!-- 查找出记录总条数 -->
+    <select id="queryCount" resultType="java.lang.Integer" parameterType="com.wiserun.develop.filetemplate.model.FileTemplate">
+		    	 SELECT COUNT(*) FROM System_FileTemplate
+		    	 <where>
+					<if test="SFT_TemplateType != null" >
+		                AND SFT_TemplateType like "%"#{SFT_TemplateType,jdbcType=VARCHAR}"%"
+		            </if>
+					<if test="SFT_State != null" >
+		                AND SFT_State =#{SFT_State,jdbcType=CHAR}
+		            </if>			            
+		            <if test="SFT_ModelCode != null" >
+		                AND SFT_ModelCode =#{SFT_ModelCode,jdbcType=VARCHAR}
+		            </if>
+		        </where>   
+    </select>  
+    <!-- 根据模块编号查找出一条详细信息 -->
+     <select id="queryOne1" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM System_FileTemplate
+        WHERE SFT_ModelCode = #{SFT_ModelCode,jdbcType=VARCHAR}
+    </select>  
+        <!-- 根据编号查找出一条详细信息 -->
+     <select id="queryOne2" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM System_FileTemplate
+        WHERE SFT_Code = #{SFT_Code,jdbcType=VARCHAR}
+    </select>
+    <!-- 添加操作 -->
+     <insert id="add" parameterType="com.wiserun.develop.filetemplate.model.FileTemplate" >
+        INSERT INTO System_FileTemplate					
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="SFT_Code != null" >
+                `SFT_Code`,
+            </if>
+            <if test="SFT_CreateTime != null" >
+                `SFT_CreateTime`,
+            </if>
+            <if test="SFT_CreateUser != null" >
+                `SFT_CreateUser`,
+            </if>
+            <if test="SFT_State != null" >
+                `SFT_State`,
+            </if>
+            <if test="SFT_TemplateType != null" >
+                `SFT_TemplateType`,
+            </if>
+            <if test="SFT_ModelCode != null" >
+                `SFT_ModelCode`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="SFT_Code != null" >
+                #{SFT_Code,jdbcType=VARCHAR},
+            </if>
+            <if test="SFT_CreateTime != null" >
+                #{SFT_CreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="SFT_CreateUser != null" >
+                #{SFT_CreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="SFT_State != null" >
+                #{SFT_State,jdbcType=CHAR},
+            </if>
+            <if test="SFT_TemplateType != null" >
+                #{SFT_TemplateType,jdbcType=VARCHAR},
+            </if>
+            <if test="SFT_ModelCode != null" >
+                #{SFT_ModelCode,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert> 
+    
+    
+    <!-- 更新方法 -->
+     <update id="update" parameterType="com.wiserun.develop.filetemplate.model.FileTemplate" >
+        update System_FileTemplate
+        <set>
+            <if test="SFT_CreateTime != null" >
+                SFT_CreateTime = #{SFT_CreateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="SFT_CreateUser != null" >
+                SFT_CreateUser = #{SFT_CreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="SFT_State != null" >
+                SFT_State = #{SFT_State,jdbcType=CHAR},
+            </if>
+            <if test="SFT_TemplateType != null" >
+                SFT_TemplateType = #{SFT_TemplateType,jdbcType=VARCHAR},
+            </if>
+            <if test="SFT_ModelCode != null" >
+                SFT_ModelCode = #{SFT_ModelCode,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where SFT_Code = #{SFT_Code,jdbcType=VARCHAR}
+    </update>  
+</mapper>
