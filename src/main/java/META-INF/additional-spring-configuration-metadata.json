@@ -1,0 +1,27 @@
+{"properties": [
+  {
+    "name": "files",
+    "type": "Map",
+    "description": "文件上传路径"
+  },
+  {
+    "name": "cas",
+    "type": "Map",
+    "description": "统一身份认证"
+  },
+  {
+    "name": "tx",
+    "type": "Map",
+    "description": "A description for 'tx'"
+  },
+  {
+    "name": "vue",
+    "type": "Map",
+    "description": "前端项目配置"
+  },
+  {
+    "name": "restful",
+    "type": "Map",
+    "description": "restful接口配置"
+  }
+]}

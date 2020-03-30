@@ -11,6 +11,9 @@ import com.temp.permission.service.MenuService;
 import com.temp.permission.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService service;
     @Value("${vue.frontUrl}")
@@ -35,6 +39,7 @@ public class UserController {
     @ApiOperation(value = "用户登录接口", notes = "登录授权交给 security 管理，这里没多大用")
     @RequestMapping(value = "/login", method = { RequestMethod.POST })
     public ResponseData login() {
+    	logger.info("com.temp.permission.controller.UserController.login");
         return FormatUtil.fail();
     }
 

@@ -26,6 +26,8 @@ public class LoginService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+    	//   /user/login接口在这里实现
+    	System.out.println("com.temp.permission.service.LoginService.loadUserByUsername》》"+s+"《《");
         OauthUser oauthUser = oauthUserMapper.queryOneByPhone(s);
         if (oauthUser == null) {
             throw new UsernameNotFoundException("用户名密码错误");
@@ -42,6 +44,7 @@ public class LoginService implements UserDetailsService {
     }
 
     public Object login(LoginRequest loginRequest) {
+    	//System.out.println("com.temp.permission.service.LoginService.login");
         User user = mapper.queryOneByPhone(loginRequest.getPhone());
         if (user == null) {
             return false;

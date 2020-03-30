@@ -190,7 +190,7 @@
         FROM admin_user
         JOIN admin_role_user ON role_user_user_id=user_id
         JOIN admin_role ON role_id=role_user_role_id
-        FROM admin_user where user_phone = #{phone, jdbcType=VARCHAR}
+        where user_phone = #{phone, jdbcType=VARCHAR}
     </select>
 
     <select id="queryOneByToken" resultMap="BaseResultMap" parameterType="java.lang.String">

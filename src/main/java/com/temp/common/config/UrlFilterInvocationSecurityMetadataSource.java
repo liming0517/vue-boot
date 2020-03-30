@@ -1,6 +1,7 @@
 package com.temp.common.config;
 
 
+import com.temp.common.model.ResponseData;
 import com.temp.permission.consts.BackendConst;
 import com.temp.permission.entity.Resource;
 import com.temp.permission.entity.Role;
@@ -66,7 +67,12 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
 
         //String token = request.getHeader("X-TOKEN");
         String token= (String)request.getSession().getAttribute("token");
-        System.out.println("-----------------::::"+request.getSession().getAttribute("token"));
+        logger.info("wis-new.com.temp.common.config.UrlFilterInvocationSecurityMetadataSource.getAttributes.sessionToken:"+token);
+        if (token==null) {
+        	 //token = request.getHeader("X-TOKEN");
+        	// logger.info("wis-new.com.temp.common.config.UrlFilterInvocationSecurityMetadataSource.getAttributes.headToken:"+token);
+        }
+        
 //        User u=new User();
 //        u=umapper.queryOne1(token);  
 //        if(u==null) {
@@ -125,6 +131,11 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
         	}else {
         		if (request.getMethod().equals("OPTIONS")) {
                     return null;
+                }
+        		//徐毅骏 2020-03-30 其他情况，直接返回未登录提示
+        		else {
+        			
+        			return null;
                 }
         	}
         }

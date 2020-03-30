@@ -6,4 +6,22 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
 logging:
   path: D:/logs
-  level: info
+  level: 
+    app: debug
+    com.temp: debug
+    com.wiserun: debug
+files:
+  path: E:\UPLOAD\
+cas:
+  server-url-prefix: http://192.168.168.73/auth
+  server-login-url: http://192.168.168.73/auth/login
+  client-host-url: http://192.168.111.101:8080/
+  casSwitch: false
+  defultRole: 2
+vue:
+  frontUrl: http://192.168.111.45:9090/
+restful:
+  systemIP: http://192.168.111.45:8080/wis-new
+  department_list: /department/list
+  user_login: /restAuth/login
+  custom_info_list: /customapi/list

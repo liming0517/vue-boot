@@ -21,7 +21,7 @@ public class UrlAccessDecisionManager implements AccessDecisionManager {
 
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, AuthenticationException {
-
+    	logger.info("wis-new.com.temp.common.config.UrlAccessDecisionManager.decide");
         Iterator<ConfigAttribute> iterator = collection.iterator();
         while (iterator.hasNext()) {
             ConfigAttribute ca = iterator.next();

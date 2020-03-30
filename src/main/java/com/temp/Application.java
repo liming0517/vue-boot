@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 		"com.wiserun.devolop.system.dao",
 		"com.wiserun.common.dao",
 		"app.dao",
-		"com.temp.custom.mapper"
-
+		"com.temp.custom.mapper",
+		"com.wiserun.RestFul.*"
 })
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.wiserun.*","com.temp.*","app.*"})

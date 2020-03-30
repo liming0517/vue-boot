@@ -10,6 +10,11 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  http:
+    encoding: 
+      charset: UTF-8
+      force:  true
+      enabled:  true
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: com.temp.common.entity
@@ -17,16 +22,6 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 logging:
   config: classpath:config/logback-spring.xml
-files:
-  path: E:\UPLOAD\
-cas:
-  server-url-prefix: http://192.168.168.73/auth
-  server-login-url: http://192.168.168.73/auth/login
-  client-host-url: http://192.168.111.101:8080/
-  casSwitch: false
-  defultRole: 2
-vue:
-  frontUrl: http://192.168.111.45:9090/
 tx:
   wx: false
   dx: false

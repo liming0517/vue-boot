@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wiserun.RestFul.mapper.RestFulApiMapper" >
+
+    <resultMap id="BaseResultMap" type="com.wiserun.RestFul.model.RestFulApiModel" >
+        <result column="id" property="id" jdbcType="VARCHAR" />
+        <result column="api" property="api" jdbcType="VARCHAR" />
+        <result column="auth_type" property="auth_type" jdbcType="VARCHAR" />
+ 		<result column="auth_id" property="auth_id" jdbcType="VARCHAR" />
+   		<result column="STATE" property="STATE" jdbcType="VARCHAR" />
+    	<result column="CREATTIME" property="CREATTIME" jdbcType="VARCHAR" />
+     	<result column="CREATUSER" property="CREATUSER" jdbcType="VARCHAR" />
+      	<result column="UPDATETIME" property="UPDATETIME" jdbcType="VARCHAR" />
+       	<result column="UPDATEUSER" property="UPDATEUSER" jdbcType="VARCHAR" />
+
+    </resultMap>
+	<!-- auth_id是用户登录账号，自动匹配配置表中用户编号和角色编号， -->
+     <select id="queryAuthByPhone" resultMap="BaseResultMap" parameterType="com.wiserun.RestFul.model.RestFulApiModel">
+		    	select a.id,a.api,a.auth_type,a.auth_id,a.state from jk_jkqx a 
+		    	left join admin_role_user b on a.auth_id=b.role_user_role_id 
+				left join admin_user c on b.role_user_user_id=c.user_id 
+		    	where  state ='1' AND api =#{api}
+				AND (c.user_phone = #{auth_id} or a.auth_id = #{auth_id})
+    </select> 
+    
+</mapper>
