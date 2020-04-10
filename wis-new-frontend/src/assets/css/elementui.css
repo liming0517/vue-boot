@@ -1,0 +1,115 @@
+/*.el-row {*/
+/*margin-bottom: 20px;*/
+/*&:last-child {*/
+/*margin-bottom: 0;*/
+/*}*/
+/*}*/
+/*.el-col {*/
+/*border-radius: 4px;*/
+/*}*/
+.bg-purple-dark {
+    background: #fff;
+}
+
+.bg-purple {
+}
+
+.bg-purple-light {
+    background: #f8f8f8;
+    border: 1px #f3ceb4 solid;
+}
+
+.grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+    padding-bottom: 20px;
+}
+
+.row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
+}
+
+.row-label {
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.row-value {
+    padding-top: 5px;
+    padding-left: 10px;
+}
+
+.bottom-button {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+/*---------------首页消息通知框修改样式---------------*/
+.purple_list {
+    margin-right: 30px;
+    background: #fff;
+    border: 1px solid #cacfd6;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, .03);
+    padding: 20px;
+}
+.el-button{
+    border-radius: 0;
+}
+.el-button--gray {
+    color: #fff;
+    border: 1px solid #928886;
+    background: #928886;
+    box-shadow: none !important;
+}
+
+.el-button--gray:focus, .el-button--gray:hover {
+    color: #fff !important;
+    border-color: #6f6664;
+    background: #6f6664!important;
+}
+
+.el-button--gray.is-active, .el-button--gray:active {
+    outline: none;
+    color: white !important;
+    border-color: #6f6664;
+    background: #6f6664!important;
+}
+
+.el-button--gray:active {
+    outline: 0
+}
+
+.el-button--gray.is-disabled, .el-button--gray.is-disabled:active, .el-button--gray.is-disabled:focus, .el-button--gray.is-disabled:hover {
+    color: #fff;
+    background-color: #cecece;
+    border-color: #b7b7b7
+}
+
+.el-button--gray.is-plain {
+    color: #fff;
+    background: #6f6664;
+    border-color: #6f6664
+}
+
+.el-button--gray.is-plain:focus, .el-button--gray.is-plain:hover {
+    background: #6f6664;
+    border-color: #6f6664;
+    color: #fff
+}
+
+.el-button--gray.is-plain:active {
+    background: #6f6664;
+    border-color: #6f6664;
+    color: #fff;
+    outline: 0
+}
+
+.el-button--gray.is-plain.is-disabled, .el-button--gray.is-plain.is-disabled:active, .el-button--gray.is-plain.is-disabled:focus, .el-button--gray.is-plain.is-disabled:hover {
+    color: #fff;
+    background-color: #6f6664;
+    border-color: #6f6664
+}
+
+
+
